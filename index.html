@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>IUBAT Employee Directory</title>
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -70,7 +73,7 @@
           <div class="stat-card__icon">👥</div>
           <div class="stat-card__body">
             <span class="stat-card__value" id="stat-total">—</span>
-            <span class="stat-card__label">Total Employees</span>
+            <span class="stat-card__label">Total</span>
           </div>
         </div>
         <div class="stat-card">
@@ -84,7 +87,7 @@
           <div class="stat-card__icon">🏢</div>
           <div class="stat-card__body">
             <span class="stat-card__value" id="stat-depts">—</span>
-            <span class="stat-card__label">Departments</span>
+            <span class="stat-card__label">Depts</span>
           </div>
         </div>
       </section>
@@ -116,7 +119,7 @@
             type="search"
             id="search-input"
             class="search-input"
-            placeholder="Search by name, designation, department…"
+            placeholder="Search name, designation, department…"
             autocomplete="off"
             aria-label="Search employees"
           />
@@ -226,7 +229,7 @@
           </table>
         </div>
 
-        <!-- Mobile Cards -->
+        <!-- Mobile Cards (contact-card style, shown on small screens) -->
         <div class="mobile-cards" id="mobile-cards-list"></div>
 
         <!-- Pagination -->
@@ -398,11 +401,10 @@
           />
         </svg>
         <svg
-          class="fab-icon fab-icon--close"
+          class="fab-icon fab-icon--close hidden"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
-          style="display: none"
         >
           <path
             d="M6 6l12 12M18 6L6 18"

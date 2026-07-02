@@ -1,6 +1,7 @@
 /* ============================================================
    IUBAT Employee Directory — style.css
    Theme: Forest green (#0f5c5c / #1a7a4a) with glass morphism
+   Improved: super-responsive, mobile contact-card layout
    ============================================================ */
 
 /* ── Reset & Tokens ───────────────────────────────────────── */
@@ -40,6 +41,7 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -48,6 +50,13 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.55;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+img,
+svg {
+  max-width: 100%;
 }
 
 /* ── Utility ──────────────────────────────────────────────── */
@@ -105,7 +114,7 @@ body {
 }
 
 .site-title {
-  font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.2;
@@ -115,7 +124,7 @@ body {
 }
 
 .site-subtitle {
-  font-size: clamp(0.68rem, 1.5vw, 0.78rem);
+  font-size: clamp(0.65rem, 1.5vw, 0.78rem);
   opacity: 0.78;
   margin-top: 2px;
   font-weight: 400;
@@ -142,6 +151,7 @@ body {
   max-width: 1400px;
   margin: 0 auto;
   padding: 24px 20px 120px;
+  width: 100%;
 }
 
 /* ── Stats ───────────────────────────────────────────────── */
@@ -156,14 +166,15 @@ body {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 18px 20px;
+  padding: 16px 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   box-shadow: var(--shadow-sm);
   transition:
     box-shadow var(--transition),
     transform var(--transition);
+  min-width: 0;
 }
 .stat-card:hover {
   box-shadow: var(--shadow-md);
@@ -171,9 +182,9 @@ body {
 }
 
 .stat-card__icon {
-  font-size: 1.6rem;
-  width: 44px;
-  height: 44px;
+  font-size: 1.5rem;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -188,14 +199,14 @@ body {
   min-width: 0;
 }
 .stat-card__value {
-  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-size: clamp(1.25rem, 4vw, 1.8rem);
   font-weight: 800;
   color: var(--green-deep);
   line-height: 1;
   letter-spacing: -0.02em;
 }
 .stat-card__label {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   color: var(--text-muted);
   font-weight: 500;
   letter-spacing: 0.02em;
@@ -284,6 +295,7 @@ body {
 
 .filter-wrap {
   flex-shrink: 0;
+  min-width: 0;
 }
 .dept-select,
 .rows-select {
@@ -305,10 +317,10 @@ body {
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 16px;
+  max-width: 100%;
 }
 .dept-select {
   min-width: 180px;
-  max-width: 100%;
 }
 .dept-select:focus,
 .rows-select:focus {
@@ -328,7 +340,7 @@ body {
   white-space: nowrap;
 }
 .rows-select {
-  min-width: 72px;
+  min-width: 68px;
 }
 
 /* ── Loading ──────────────────────────────────────────────── */
@@ -356,7 +368,7 @@ body {
 .error-state,
 .empty-state {
   text-align: center;
-  padding: 56px 24px;
+  padding: 48px 20px;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -364,19 +376,19 @@ body {
 }
 .error-icon,
 .empty-icon {
-  font-size: 2.8rem;
+  font-size: 2.6rem;
   margin-bottom: 12px;
 }
 .error-state h3,
 .empty-state h3 {
   margin-bottom: 8px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 .error-state p,
 .empty-state p {
   color: var(--text-muted);
   margin-bottom: 20px;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
 }
 .btn-retry,
 .btn-clear-all {
@@ -413,7 +425,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.875rem;
-  min-width: 640px;
+  min-width: 720px;
 }
 
 .dir-table thead tr {
@@ -582,7 +594,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  padding: 14px 16px;
+  padding: 14px 12px;
   border-top: 1px solid var(--border);
   flex-wrap: wrap;
 }
@@ -672,17 +684,17 @@ body {
   transform: translateX(-50%);
   background: #1a2e1a;
   color: #a8e6cf;
-  padding: 12px 22px;
+  padding: 12px 20px;
   border-radius: 30px;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-weight: 500;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   z-index: 9999;
-  white-space: nowrap;
   animation: toastIn 0.3s ease;
   pointer-events: none;
   max-width: calc(100vw - 32px);
   text-align: center;
+  white-space: normal;
 }
 @keyframes toastIn {
   from {
@@ -956,163 +968,77 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════
-   MOBILE CARDS — Phone-first employee cards with copy
+   MOBILE CONTACT CARDS
+   Stacked "business card" style — everything on its own
+   line, wraps naturally, never clipped, always fits the
+   phone viewport width.
    ══════════════════════════════════════════════════════ */
 .mobile-cards {
   display: none;
-  padding: 12px;
+  padding: 10px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Individual card */
 .mobile-card {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  margin-bottom: 10px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition:
     box-shadow var(--transition),
     transform var(--transition);
+  width: 100%;
 }
-.mobile-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+.mobile-card:active {
+  transform: scale(0.995);
 }
 
-/* Card top accent bar */
 .mobile-card__accent {
   height: 4px;
   background: linear-gradient(90deg, var(--green-deep), var(--green-vivid));
 }
 
-/* Card header — avatar + name + designation */
-.mobile-card__header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px 10px;
+.mobile-card__body {
+  padding: 16px 16px 14px;
 }
 
-.mobile-card__avatar {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--green-xlight);
-  color: var(--green-deep);
-  font-size: 0.85rem;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  border: 2px solid var(--green-light);
-  letter-spacing: 0.02em;
+/* Every field is its own line, wraps freely, never cuts off */
+.mobile-card__field {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
-.mobile-card__info {
-  flex: 1;
-  min-width: 0;
-}
-
-.mobile-card__name {
-  font-size: 0.95rem;
+.mobile-card__field--name {
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--green-deep);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-bottom: 2px;
 }
 
-.mobile-card__desig {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.mobile-card__field--designation {
+  color: var(--text-primary);
+  font-weight: 500;
 }
 
-/* Card body — department / room / email / phone */
-.mobile-card__body {
-  padding: 0 16px 12px;
-  border-top: 1px solid var(--border);
-  margin: 0 16px;
-  padding-top: 10px;
-}
-
-.mobile-card__row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.82rem;
-  padding: 4px 0;
-}
-
-.mobile-card__row-icon {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  color: var(--green-mid);
-}
-
-.mobile-card__row-text {
-  flex: 1;
-  min-width: 0;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.mobile-card__row-text a {
+.mobile-card__field a {
   color: var(--green-mid);
   text-decoration: none;
-  transition: color var(--transition);
-}
-.mobile-card__row-text a:hover {
-  color: var(--green-deep);
-  text-decoration: underline;
-}
-
-.mobile-card__dept-badge {
-  display: inline-flex;
-  align-items: center;
-  background: var(--green-glass);
-  color: var(--green-deep);
-  border: 1px solid rgba(15, 92, 92, 0.18);
-  border-radius: 20px;
-  padding: 2px 10px;
-  font-size: 0.75rem;
   font-weight: 600;
-  white-space: nowrap;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+.mobile-card__field a:hover {
+  text-decoration: underline;
+  color: var(--green-deep);
 }
 
-.mobile-card__room-pill {
-  display: inline-flex;
-  align-items: center;
-  background: var(--off-white);
-  color: var(--text-muted);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 2px 8px;
-  font-size: 0.72rem;
-  font-weight: 500;
-  white-space: nowrap;
-  margin-left: 6px;
-  flex-shrink: 0;
-}
-
-/* Card footer — copy button */
 .mobile-card__footer {
-  padding: 10px 16px 14px;
+  padding: 0 16px 16px;
   display: flex;
-  align-items: center;
   justify-content: flex-end;
-  gap: 8px;
 }
 
 /* ── Copy Button ─────────────────────────────────────────── */
@@ -1124,8 +1050,8 @@ body {
   color: var(--green-deep);
   border: 1.5px solid rgba(15, 92, 92, 0.25);
   border-radius: var(--radius-sm);
-  padding: 7px 14px;
-  font-size: 0.78rem;
+  padding: 8px 16px;
+  font-size: 0.8rem;
   font-weight: 700;
   font-family: var(--font-ui);
   cursor: pointer;
@@ -1153,7 +1079,6 @@ body {
   box-shadow: none;
 }
 
-/* Copied state */
 .btn-copy-card.copied {
   background: var(--green-vivid);
   color: var(--white);
@@ -1165,14 +1090,8 @@ body {
   width: 13px;
   height: 13px;
   flex-shrink: 0;
-  transition: transform 0.15s ease;
 }
 
-.btn-copy-card:hover .btn-copy-card__icon {
-  transform: scale(1.15);
-}
-
-/* Check icon hidden by default, shown on copied */
 .btn-copy-card__check {
   display: none;
 }
@@ -1182,11 +1101,6 @@ body {
 .btn-copy-card.copied .btn-copy-card__check {
   display: block;
 }
-
-.btn-copy-card__label {
-  transition: none;
-}
-/* ──────────────────────────────────────────────────────────── */
 
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 900px) {
@@ -1198,7 +1112,7 @@ body {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .header-inner {
     padding: 12px 14px;
   }
@@ -1214,7 +1128,7 @@ body {
   }
 
   .main-content {
-    padding: 14px 12px 100px;
+    padding: 14px 10px 100px;
   }
 
   .stats-row {
@@ -1223,7 +1137,7 @@ body {
     margin-bottom: 14px;
   }
   .stat-card {
-    padding: 12px 10px;
+    padding: 12px 8px;
     gap: 0;
     flex-direction: column;
     align-items: center;
@@ -1232,15 +1146,15 @@ body {
   .stat-card__icon {
     width: 32px;
     height: 32px;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     margin-bottom: 5px;
     border-radius: 8px;
   }
   .stat-card__value {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
   }
   .stat-card__label {
-    font-size: 0.62rem;
+    font-size: 0.6rem;
   }
 
   .toolbar {
@@ -1253,6 +1167,7 @@ body {
   .filter-wrap {
     flex: 1 1 auto;
     order: 2;
+    width: 100%;
   }
   .filter-wrap .dept-select {
     width: 100%;
@@ -1263,12 +1178,12 @@ body {
     flex-shrink: 0;
   }
 
-  /* Switch views */
+  /* Switch views: table becomes cards */
   .dir-table {
     display: none;
   }
   .mobile-cards {
-    display: block;
+    display: flex;
   }
   .table-container {
     overflow-x: visible;
@@ -1276,7 +1191,7 @@ body {
 
   .pagination {
     gap: 4px;
-    padding: 12px;
+    padding: 12px 8px;
   }
   .page-btn {
     padding: 6px 10px;
@@ -1306,9 +1221,33 @@ body {
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 380px) {
+  .site-title {
+    font-size: 0.85rem;
+  }
+  .logo-emblem {
+    width: 34px;
+    height: 34px;
+  }
+  .mobile-card__body {
+    padding: 14px 14px 12px;
+  }
+  .mobile-card__field {
+    font-size: 0.85rem;
+  }
+  .mobile-card__field--name {
+    font-size: 0.96rem;
+  }
+  .btn-copy-card {
+    padding: 7px 13px;
+    font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 340px) {
   .stats-row {
     grid-template-columns: 1fr 1fr;
+    gap: 6px;
   }
   .stat-card:last-child {
     grid-column: span 2;
