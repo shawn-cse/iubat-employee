@@ -2,11 +2,6 @@
  * IUBAT Employee Directory — script.js
  * Supabase-connected employee directory with search, filter,
  * sort, pagination, copy-to-clipboard, FAB, and feedback modal.
- *
- * Mobile view renders each employee as a stacked "contact card"
- * box (Name / Designation / Department / Room / Email / Phone),
- * each field on its own line, wrapping naturally so it always
- * fits the phone screen — with a one-tap Copy button.
  */
 
 "use strict";
@@ -18,12 +13,12 @@ const TABLE_NAME = "Employee";
 const FEEDBACK_EMAIL = "shawn.iubat@gmail.com";
 
 /* ── State ──────────────────────────────────────────────── */
-let allEmployees = []; // raw data from Supabase
-let filteredData = []; // after search + dept filter
+let allEmployees = [];
+let filteredData = [];
 let currentPage = 1;
 let rowsPerPage = 20;
 let sortCol = "Name";
-let sortDir = "asc"; // 'asc' | 'desc'
+let sortDir = "asc";
 let searchQuery = "";
 let deptFilter = "";
 let fabOpen = false;
@@ -221,18 +216,7 @@ function renderTable() {
     .join("");
 }
 
-/* ── Mobile Contact-Card Render ──────────────────────────
- * Each employee is shown as a stacked box:
- *   Name,
- *   Designation,
- *   Department,
- *   Room # ___,
- *   email,
- *   phone
- * Every field sits on its own line and wraps normally, so
- * long names/departments never get clipped or overflow the
- * phone's width — and a Copy button copies the same text.
- * ────────────────────────────────────────────────────── */
+/* ── Mobile Contact-Card Render ────────────────────────── */
 function renderMobileCards() {
   const start = (currentPage - 1) * rowsPerPage;
   const slice = filteredData.slice(start, start + rowsPerPage);
@@ -252,43 +236,50 @@ function renderMobileCards() {
       const email = (emp.Email || "").trim();
       const cell = (emp.Cell || "").trim();
 
-      const lines = [];
-      if (name)
-        lines.push(
-          `<p class="mobile-card__field mobile-card__field--name">${escHtml(name)},</p>`,
-        );
-      if (desig)
-        lines.push(
-          `<p class="mobile-card__field mobile-card__field--designation">${escHtml(desig)},</p>`,
-        );
-      if (dept)
-        lines.push(`<p class="mobile-card__field">${escHtml(dept)},</p>`);
-      if (room)
-        lines.push(
-          `<p class="mobile-card__field">Room # ${escHtml(room)},</p>`,
-        );
-      if (email)
-        lines.push(
-          `<p class="mobile-card__field"><a href="mailto:${escHtml(email)}">${escHtml(email)}</a>,</p>`,
-        );
-      if (cell)
-        lines.push(
-          `<p class="mobile-card__field"><a href="tel:${escHtml(cell)}">${escHtml(cell)}</a></p>`,
-        );
-
-      // Strip trailing comma from the very last line if present
-      if (lines.length) {
-        lines[lines.length - 1] = lines[lines.length - 1]
-          .replace(/,(<\/[ap]>?)$/, "$1")
-          .replace(/,<\/a>,<\/p>$/, "</a></p>")
-          .replace(/,<\/p>$/, "</p>");
-      }
-
-      return `
+      let html = `
       <div class="mobile-card">
         <div class="mobile-card__accent"></div>
         <div class="mobile-card__body">
-          ${lines.join("")}
+      `;
+
+      if (name) {
+        html += `<p class="mobile-card__field mobile-card__field--name">${escHtml(name)}</p>`;
+      }
+      if (desig) {
+        html += `<p class="mobile-card__field mobile-card__field--designation">${escHtml(desig)}</p>`;
+      }
+      if (dept) {
+        html += `<p class="mobile-card__field">${escHtml(dept)}</p>`;
+      }
+      if (room) {
+        html += `<p class="mobile-card__field">Room # ${escHtml(room)}</p>`;
+      }
+      if (email) {
+        html += `
+          <p class="mobile-card__field mobile-card__field--clickable">
+            <a href="mailto:${escHtml(email)}" class="mobile-card__link mobile-card__link--email">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M2 5l8 6 8-6M2 5v10a2 2 0 002 2h12a2 2 0 002-2V5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              ${escHtml(email)}
+            </a>
+          </p>
+        `;
+      }
+      if (cell) {
+        html += `
+          <p class="mobile-card__field mobile-card__field--clickable">
+            <a href="tel:${escHtml(cell)}" class="mobile-card__link mobile-card__link--phone">
+              <svg viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M6 2L4 5a13 13 0 007 7l3-2 3 4a2 2 0 01-1 3A17 17 0 011 5a2 2 0 012-1l4 3z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              ${escHtml(cell)}
+            </a>
+          </p>
+        `;
+      }
+
+      html += `
         </div>
         <div class="mobile-card__footer">
           <button class="btn-copy-card" onclick="copyCard(${globalIdx}, this)" title="Copy employee info">
@@ -297,7 +288,10 @@ function renderMobileCards() {
             <span class="btn-copy-card__label">Copy</span>
           </button>
         </div>
-      </div>`;
+      </div>
+      `;
+
+      return html;
     })
     .join("");
 }
@@ -382,47 +376,90 @@ function buildContactText(emp) {
   if (email) fields.push(email);
   if (cell) fields.push(cell);
 
-  // Join with ",\n" and end without a trailing comma
-  return fields.join(",\n");
+  return fields.join("\n");
 }
 
 function copyTextToClipboard(text, onDone) {
-  navigator.clipboard
-    .writeText(text)
-    .then(onDone)
-    .catch(() => {
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        if (onDone) onDone();
+      })
+      .catch((err) => {
+        console.error("Clipboard API failed:", err);
+        fallbackCopy(text, onDone);
+      });
+  } else {
+    fallbackCopy(text, onDone);
+  }
+}
+
+function fallbackCopy(text, onDone) {
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.top = "0";
+  ta.style.left = "0";
+  ta.style.width = "1px";
+  ta.style.height = "1px";
+  ta.style.opacity = "0";
+  ta.style.pointerEvents = "none";
+  ta.style.border = "none";
+  ta.style.outline = "none";
+  document.body.appendChild(ta);
+
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+
+  try {
+    const success = document.execCommand("copy");
+    if (success && onDone) {
       onDone();
-    });
+    }
+  } catch (err) {
+    console.error("Fallback copy error:", err);
+  }
+
+  setTimeout(() => {
+    document.body.removeChild(ta);
+  }, 100);
 }
 
 /* ── Copy row (desktop table) ───────────────────────────── */
 function copyRow(idx) {
   const emp = filteredData[idx];
-  if (!emp) return;
-  copyTextToClipboard(buildContactText(emp), () => {
+  if (!emp) {
+    showToast("⚠️ Employee not found");
+    return;
+  }
+  const text = buildContactText(emp);
+  copyTextToClipboard(text, () => {
     showToast("✅ Employee info copied to clipboard");
+    const buttons = document.querySelectorAll(".btn-copy-row");
+    const btn = buttons[idx];
+    if (btn) {
+      btn.classList.add("copied");
+      setTimeout(() => btn.classList.remove("copied"), 1500);
+    }
   });
 }
 
 /* ── Copy card (mobile) ─────────────────────────────────── */
 function copyCard(idx, btnEl) {
   const emp = filteredData[idx];
-  if (!emp) return;
-  copyTextToClipboard(buildContactText(emp), () => {
+  if (!emp) {
+    showToast("⚠️ Employee not found");
+    return;
+  }
+  const text = buildContactText(emp);
+  copyTextToClipboard(text, () => {
     showToast("✅ Employee info copied to clipboard");
     if (btnEl) {
       btnEl.classList.add("copied");
       const label = btnEl.querySelector(".btn-copy-card__label");
       const prevLabel = label ? label.textContent : null;
-      if (label) label.textContent = "Copied";
+      if (label) label.textContent = "Copied!";
       setTimeout(() => {
         btnEl.classList.remove("copied");
         if (label && prevLabel !== null) label.textContent = prevLabel;
@@ -555,17 +592,3 @@ document.addEventListener("DOMContentLoaded", () => {
   initSortHeaders();
   initApp();
 });
-
-/*
- * ── SQL Setup Reference ───────────────────────────────────
- * Run this in your Supabase SQL Editor before first use:
- *
- *   ALTER TABLE "Employee" ENABLE ROW LEVEL SECURITY;
- *
- *   CREATE POLICY "Public read access"
- *     ON "Employee"
- *     FOR SELECT
- *     TO anon
- *     USING (true);
- * ─────────────────────────────────────────────────────────
- */

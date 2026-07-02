@@ -1,7 +1,5 @@
 /* ============================================================
    IUBAT Employee Directory — style.css
-   Theme: Forest green (#0f5c5c / #1a7a4a) with glass morphism
-   Improved: super-responsive, mobile contact-card layout
    ============================================================ */
 
 /* ── Reset & Tokens ───────────────────────────────────────── */
@@ -35,7 +33,6 @@
   --radius-xl: 24px;
   --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
   --font-ui: "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: "Fira Code", "Consolas", monospace;
 }
 
 html {
@@ -968,16 +965,13 @@ svg {
 }
 
 /* ══════════════════════════════════════════════════════
-   MOBILE CONTACT CARDS
-   Stacked "business card" style — everything on its own
-   line, wraps naturally, never clipped, always fits the
-   phone viewport width.
+   MOBILE CONTACT CARDS - Always visible on mobile
    ══════════════════════════════════════════════════════ */
 .mobile-cards {
-  display: none;
-  padding: 10px;
+  display: flex;
   flex-direction: column;
   gap: 12px;
+  padding: 10px;
 }
 
 .mobile-card {
@@ -1004,35 +998,88 @@ svg {
   padding: 16px 16px 14px;
 }
 
-/* Every field is its own line, wraps freely, never cuts off */
 .mobile-card__field {
   font-size: 0.9rem;
   line-height: 1.5;
   color: var(--text-secondary);
   overflow-wrap: anywhere;
   word-break: break-word;
+  margin: 4px 0;
+  padding: 2px 0;
 }
 
 .mobile-card__field--name {
-  font-size: 1.02rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--green-deep);
-  margin-bottom: 2px;
+  margin-bottom: 6px;
 }
 
 .mobile-card__field--designation {
+  font-size: 0.95rem;
   color: var(--text-primary);
   font-weight: 500;
+  margin-bottom: 4px;
 }
 
-.mobile-card__field a {
-  color: var(--green-mid);
+.mobile-card__field--clickable {
+  margin: 2px 0;
+}
+
+.mobile-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
   text-decoration: none;
   font-weight: 600;
+  transition: all var(--transition);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
-.mobile-card__field a:hover {
-  text-decoration: underline;
+
+.mobile-card__link--email {
   color: var(--green-deep);
+  background: var(--green-xlight);
+  border: 1.5px solid rgba(15, 92, 92, 0.15);
+}
+
+.mobile-card__link--email:hover {
+  background: var(--green-deep);
+  color: var(--white);
+  border-color: var(--green-deep);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-card__link--email:active {
+  transform: scale(0.98);
+}
+
+.mobile-card__link--phone {
+  color: #0f5c5c;
+  background: #d4edda;
+  border: 1.5px solid rgba(15, 92, 92, 0.15);
+}
+
+.mobile-card__link--phone:hover {
+  background: var(--green-deep);
+  color: var(--white);
+  border-color: var(--green-deep);
+  transform: translateX(4px);
+  box-shadow: var(--shadow-sm);
+}
+
+.mobile-card__link--phone:active {
+  transform: scale(0.98);
+}
+
+.mobile-card__link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 .mobile-card__footer {
@@ -1048,42 +1095,48 @@ svg {
   gap: 6px;
   background: var(--white);
   color: var(--green-deep);
-  border: 1.5px solid rgba(15, 92, 92, 0.25);
-  border-radius: var(--radius-sm);
-  padding: 8px 16px;
-  font-size: 0.8rem;
+  border: 2px solid var(--green-deep);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  font-size: 0.85rem;
   font-weight: 700;
   font-family: var(--font-ui);
   cursor: pointer;
-  transition:
-    background var(--transition),
-    color var(--transition),
-    border-color var(--transition),
-    transform var(--transition),
-    box-shadow var(--transition);
+  transition: all var(--transition);
   letter-spacing: 0.01em;
   white-space: nowrap;
   user-select: none;
+  min-width: 80px;
+  justify-content: center;
 }
 
 .btn-copy-card:hover {
   background: var(--green-deep);
   color: var(--white);
-  border-color: var(--green-deep);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
 .btn-copy-card:active {
-  transform: translateY(0);
-  box-shadow: none;
+  transform: scale(0.96);
 }
 
 .btn-copy-card.copied {
   background: var(--green-vivid);
-  color: var(--white);
   border-color: var(--green-vivid);
+  color: var(--white);
   pointer-events: none;
+  animation: copiedPulse 0.5s ease;
+}
+
+@keyframes copiedPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .btn-copy-card__icon {
@@ -1094,6 +1147,9 @@ svg {
 
 .btn-copy-card__check {
   display: none;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
 }
 .btn-copy-card.copied .btn-copy-card__icon {
   display: none;
@@ -1103,15 +1159,6 @@ svg {
 }
 
 /* ── Responsive ───────────────────────────────────────────── */
-@media (max-width: 900px) {
-  .stats-row {
-    gap: 10px;
-  }
-  .dept-select {
-    min-width: 150px;
-  }
-}
-
 @media (max-width: 768px) {
   .header-inner {
     padding: 12px 14px;
@@ -1178,12 +1225,9 @@ svg {
     flex-shrink: 0;
   }
 
-  /* Switch views: table becomes cards */
+  /* Hide table, show cards on mobile */
   .dir-table {
     display: none;
-  }
-  .mobile-cards {
-    display: flex;
   }
   .table-container {
     overflow-x: visible;
@@ -1219,6 +1263,27 @@ svg {
   .modal-title {
     font-size: 1.1rem;
   }
+
+  .mobile-card__link {
+    padding: 10px 14px;
+    font-size: 0.95rem;
+  }
+  .mobile-card__link svg {
+    width: 20px;
+    height: 20px;
+  }
+  .btn-copy-card {
+    padding: 12px 24px;
+    font-size: 0.9rem;
+    min-width: 100px;
+  }
+}
+
+/* ── Desktop: hide mobile cards ───────────────────────────── */
+@media (min-width: 769px) {
+  .mobile-cards {
+    display: none !important;
+  }
 }
 
 @media (max-width: 380px) {
@@ -1238,9 +1303,18 @@ svg {
   .mobile-card__field--name {
     font-size: 0.96rem;
   }
+  .mobile-card__link {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+  .mobile-card__link svg {
+    width: 16px;
+    height: 16px;
+  }
   .btn-copy-card {
-    padding: 7px 13px;
-    font-size: 0.76rem;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    min-width: 80px;
   }
 }
 
