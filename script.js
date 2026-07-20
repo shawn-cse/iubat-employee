@@ -654,13 +654,9 @@ function fallbackCopy(text) {
     ta.style.left = '-9999px';
     document.body.appendChild(ta);
     ta.select();
-    try { document.execCommand('copy');
-        showToast('Copied!'); } catch (e) { showToast('Could not copy'); }
+    try { document.execCommand('copy'); showToast('Copied!'); }
+    catch (e) { showToast('Could not copy'); }
     document.body.removeChild(ta);
-}
-
-function getContactString(e) {
-    return `${e.name} | ${e.designation} | ${e.dept} | Room ${e.room} | ${e.email} | ${e.phone}`;
 }
 
 function esc(str) {
@@ -670,6 +666,9 @@ function esc(str) {
 }
 
 // ─── render cards ────────────────────────────────────────
+// Each contact method (email / phone) is its own row: icon + kind label +
+// value on the link, with a small icon-only copy button beside it — never
+// wrapped text, never a floating "tap to email"/"tap to call" caption.
 function render(data) {
     if (!data || data.length === 0) {
         rosterWrap.classList.add('hidden');
@@ -683,42 +682,51 @@ function render(data) {
         <div class="employee-card">
             <div class="card-name">${esc(e.name)}</div>
             <div class="card-designation">${esc(e.designation)}</div>
-            <div class="card-dept">${esc(e.dept)}</div>
-            <div class="card-room"><strong>Room</strong> ${esc(e.room) || '—'}</div>
+            <div class="card-meta-row">
+                <span class="card-dept">${esc(e.dept)}</span>
+                ${e.room ? `<span class="card-room"><strong>Room</strong> ${esc(e.room)}</span>` : ''}
+            </div>
 
-            <div class="contact-row">
+            ${(e.email || e.phone) ? `
+            <div class="contact-list">
                 ${e.email ? `
-                    <a href="mailto:${esc(e.email)}" class="contact-chip" aria-label="Email ${esc(e.email)}">
-                        <span class="icon">✉</span>
-                        <span class="value">${esc(e.email)}</span>
-                        <span class="label">· tap to email</span>
+                <div class="contact-item">
+                    <a href="mailto:${esc(e.email)}" class="contact-link" aria-label="Email ${esc(e.email)}">
+                        <span class="icon">✉️</span>
+                        <span class="contact-text">
+                            <span class="contact-kind">Email</span>
+                            <span class="contact-value">${esc(e.email)}</span>
+                        </span>
                     </a>
-                ` : ''}
+                    <button class="copy-btn" data-copy="${esc(e.email)}" aria-label="Copy email">⧉</button>
+                </div>` : ''}
                 ${e.phone ? `
-                    <a href="tel:${esc(e.phone)}" class="contact-chip" aria-label="Call ${esc(e.phone)}">
+                <div class="contact-item">
+                    <a href="tel:${esc(e.phone)}" class="contact-link" aria-label="Call ${esc(e.phone)}">
                         <span class="icon">📞</span>
-                        <span class="value">${esc(e.phone)}</span>
-                        <span class="label">· tap to call</span>
+                        <span class="contact-text">
+                            <span class="contact-kind">Phone</span>
+                            <span class="contact-value">${esc(e.phone)}</span>
+                        </span>
                     </a>
-                ` : ''}
-            </div>
-
-            <div class="card-actions">
-                <button class="copy-btn" data-contact="${esc(getContactString(e))}">📋 Copy</button>
-            </div>
+                    <button class="copy-btn" data-copy="${esc(e.phone)}" aria-label="Copy phone">⧉</button>
+                </div>` : ''}
+            </div>` : ''}
         </div>
     `).join('');
-
-    document.querySelectorAll('.copy-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            const contact = this.getAttribute('data-contact');
-            copyToClipboard(contact);
-            this.classList.add('copied');
-            setTimeout(() => this.classList.remove('copied'), 1000);
-        });
-    });
 }
+
+// Event delegation for copy buttons — attached once, survives every
+// re-render, and never risks stale/duplicate listeners on repeated search.
+cardList.addEventListener('click', function (e) {
+    const btn = e.target.closest('.copy-btn');
+    if (!btn) return;
+    e.stopPropagation();
+    const text = btn.getAttribute('data-copy');
+    copyToClipboard(text);
+    btn.classList.add('copied');
+    setTimeout(() => btn.classList.remove('copied'), 900);
+});
 
 // ─── filter ──────────────────────────────────────────────
 function filterData(query) {
@@ -795,3 +803,4 @@ searchInput.addEventListener('input', updateSearch);
 clearBtn.addEventListener('click', clearSearch);
 
 document.addEventListener('DOMContentLoaded', init);
+
