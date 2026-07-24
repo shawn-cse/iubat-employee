@@ -83,7 +83,9 @@ function escapeHtml(str) {
 }
 
 function normalize(str) {
-  return String(str || "").toLowerCase().trim();
+  return String(str || "")
+    .toLowerCase()
+    .trim();
 }
 
 function showToast(message) {
@@ -209,9 +211,11 @@ function renderList(employees) {
 
 function updateResultCount(count, total) {
   if (!searchQuery) {
-    resultCountEl.textContent = total === 1 ? "1 employee listed" : `${total} employees listed`;
+    resultCountEl.textContent =
+      total === 1 ? "1 employee listed" : `${total} employees listed`;
   } else {
-    resultCountEl.textContent = count === 1 ? "1 match found" : `${count} matches found`;
+    resultCountEl.textContent =
+      count === 1 ? "1 match found" : `${count} matches found`;
   }
 }
 
@@ -249,7 +253,10 @@ async function loadEmployees() {
   employeeListEl.innerHTML = "";
 
   try {
-    const { data, error } = await db.from(TABLE_NAME).select("*").order(COL.name, { ascending: true });
+    const { data, error } = await db
+      .from(TABLE_NAME)
+      .select("*")
+      .order(COL.name, { ascending: true });
 
     if (error) throw error;
 
@@ -260,7 +267,8 @@ async function loadEmployees() {
     console.error("Failed to load employees:", err);
     loadingStateEl.hidden = true;
     errorStateEl.hidden = false;
-    errorMessageEl.textContent = err.message || "Please check your connection and try again.";
+    errorMessageEl.textContent =
+      err.message || "Please check your connection and try again.";
   }
 }
 
@@ -288,7 +296,10 @@ employeeListEl.addEventListener("click", async (e) => {
     const text = buildShareText(emp);
     if (navigator.share) {
       try {
-        await navigator.share({ title: emp[COL.name] || "IUBAT Employee", text });
+        await navigator.share({
+          title: emp[COL.name] || "IUBAT Employee",
+          text,
+        });
       } catch (err) {
         // user cancelled the share sheet
       }
