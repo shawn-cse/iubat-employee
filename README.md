@@ -182,7 +182,7 @@ Distributed under the MIT License. See `LICENSE` file for more information.
 
 ## 📬 Contact
 
-**Developer:** Shawon  
+**Developer:** Shawn  
 **Email:** shawn.iubat@gmail.com  
 **Facebook:** [shawnazd](https://facebook.com/shawnazd)  
 **WhatsApp:** +880 1873 319733  
