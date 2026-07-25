@@ -1,76 +1,280 @@
-# IUBAT Employee Roster
+<div align="center">
 
-A modern, responsive web application for browsing the employee directory of the International University of Business Agriculture and Technology (IUBAT). Built with vanilla JavaScript and Supabase for real-time data access.
+<img src="https://readme-typing-svg.herokuapp.com?font=Inter&weight=700&size=25&duration=2800&pause=900&color=006F3C&center=true&vCenter=true&width=850&lines=Professional+IUBAT+Employee+Directory;Smart+Search+%7C+Real-Time+Data+%7C+Employee+Profiles;Built+with+HTML%2C+CSS%2C+JavaScript+%26+Supabase" />
 
-![Version](https://img.shields.io/badge/version-1.0.0-green)
-![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-blue)
-![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+<br/>
 
-## ✨ Features
+<a href="https://shawn-cse.github.io/iubat-employee/">
+<img src="https://img.shields.io/badge/Live%20Website-Visit%20Now-006F3C?style=for-the-badge&logo=githubpages&logoColor=white" />
+</a>
 
-- **🔍 Live Search** – Filter employees by name, designation, or department with instant results
-- **📱 Responsive Design** – Optimized for desktop, tablet, and mobile devices
-- **📞 Tap-to-Call** – One-tap phone dialing on mobile devices
-- **✉️ Tap-to-Email** – Quick email composition with one tap
-- **📋 Copy & Share** – Copy employee details to clipboard or share via native share dialog
-- **⚡ Real-time Data** – Powered by Supabase for up-to-date information
-- **🎨 Clean UI** – Modern, accessible interface with smooth animations
-- **♿ Accessibility** – ARIA labels and keyboard navigation support
+<a href="https://github.com/shawn-cse/iubat-employee">
+<img src="https://img.shields.io/badge/GitHub-Repository-111111?style=for-the-badge&logo=github&logoColor=white" />
+</a>
 
-## 🚀 Live Demo
+<img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
 
-Visit the live application: [IUBAT Employee Roster](https://shawn-cse.github.io/iubat-employee/)
+<img src="https://img.shields.io/badge/Version-1.0.0-C8102E?style=for-the-badge" />
 
-## 📋 Table of Contents
+</div>
 
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Technologies Used](#technologies-used)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
-## 🔧 Installation
+# 📌 Project Overview
 
-### Prerequisites
+**IUBAT Employee Roster** is a modern, responsive employee directory web application built for **IUBAT — International University of Business Agriculture and Technology**.
 
-- A modern web browser (Chrome, Firefox, Safari, Edge)
-- Internet connection (for Supabase API access)
+The platform provides a simple and efficient way to browse employee information with instant search, employee profiles, contact actions, and real-time data access powered by **Supabase**.
 
-### Local Setup
+Users can quickly find employees, view details, call phone numbers, send emails, copy information, and share employee details through a clean and mobile-friendly interface.
 
-1. **Clone the repository**
 
-   ```bash
-   git clone https://github.com/shawn-cse/iubat-employee.git
-   cd iubat-employee
-   ```
+---
 
-2. **Open the application**
+# 🌐 Live Website
 
-   ```bash
-   # Open index.html in your browser
-   open index.html
-   # Or simply double-click the file
-   ```
+<div align="center">
 
-3. **No build tools required** – This is a pure HTML/CSS/JavaScript application.
+## 🚀 [Visit IUBAT Employee Roster](https://shawn-cse.github.io/iubat-employee/)
 
-## ⚙️ Configuration
+</div>
 
-### Supabase Setup
 
-The application uses Supabase as its backend. To configure your own instance:
+<img width="100%" src="YOUR_SCREENSHOT_LINK_HERE" />
 
-1. **Create a Supabase account** at [supabase.com](https://supabase.com)
-2. **Create a new project** and note your URL and anon key
-3. **Create the Employee table** with the following schema:
+
+---
+
+# 🌟 Key Features
+
+
+<table>
+
+<tr>
+
+<td width="50%">
+
+## 🔍 Smart Search System
+
+- Real-time employee search
+- Search by name
+- Search by designation
+- Search by department
+- Instant filtering results
+- Fast browsing experience
+
+</td>
+
+
+<td width="50%">
+
+## 👤 Employee Directory
+
+- Employee profiles
+- Designation information
+- Department details
+- Office location
+- Room number
+- Email and phone information
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td width="50%">
+
+## 📞 Contact Features
+
+- Tap-to-call functionality
+- Tap-to-email support
+- Copy employee information
+- Native sharing option
+- Mobile optimized actions
+
+</td>
+
+
+<td width="50%">
+
+## ⚡ Supabase Integration
+
+- Real-time database access
+- Cloud-powered employee data
+- Secure API communication
+- Scalable backend solution
+
+</td>
+
+</tr>
+
+
+<tr>
+
+<td width="50%">
+
+## 📱 Responsive Design
+
+- Desktop support
+- Tablet friendly
+- Mobile responsive
+- Modern card layout
+- Smooth animations
+
+</td>
+
+
+<td width="50%">
+
+## ♿ Accessibility
+
+- Semantic HTML
+- ARIA support
+- Keyboard navigation
+- User-friendly interface
+
+</td>
+
+</tr>
+
+</table>
+
+
+---
+
+# 🎨 UI & Design Highlights
+
+
+<div align="center">
+
+<img src="https://img.shields.io/badge/UI-Modern%20Dashboard-006F3C?style=for-the-badge" />
+
+<img src="https://img.shields.io/badge/Design-Clean%20%26%20Professional-B78628?style=for-the-badge" />
+
+<img src="https://img.shields.io/badge/Responsive-All%20Devices-C8102E?style=for-the-badge" />
+
+<img src="https://img.shields.io/badge/Animation-Smooth%20Experience-333333?style=for-the-badge" />
+
+</div>
+
+
+| Section | Design Purpose |
+|---|---|
+| Green Theme | University professional identity |
+| Gold Accent | Highlight elements |
+| Employee Cards | Organized information display |
+| Responsive Layout | Multi-device support |
+| Smooth Animation | Better user experience |
+
+
+---
+
+# 🏛 Application Structure
+
+
+```text
+IUBAT Employee Roster
+
+│
+├── Employee Dashboard
+│
+├── Live Search Engine
+│
+├── Employee Profile Cards
+│
+├── Contact Management
+│   ├── Email
+│   ├── Phone Call
+│   ├── Copy
+│   └── Share
+│
+├── Supabase Database
+│
+└── Responsive Interface
+
+```
+
+
+---
+
+# 🛠 Tech Stack
+
+
+<div align="center">
+
+<img src="https://img.shields.io/badge/HTML5-Structure-E34F26?style=for-the-badge&logo=html5&logoColor=white" />
+
+<img src="https://img.shields.io/badge/CSS3-Styling-1572B6?style=for-the-badge&logo=css3&logoColor=white" />
+
+<img src="https://img.shields.io/badge/JavaScript-Logic-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111111" />
+
+<img src="https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white" />
+
+<img src="https://img.shields.io/badge/GitHub-Pages-181717?style=for-the-badge&logo=github&logoColor=white" />
+
+</div>
+
+
+---
+
+# 📁 Project Structure
+
+
+```text
+iubat-employee/
+
+│
+├── index.html
+│
+├── style.css
+│
+├── script.js
+│
+└── README.md
+
+```
+
+
+---
+
+# ⚙️ Installation & Setup
+
+
+Clone repository:
+
+```bash
+git clone https://github.com/shawn-cse/iubat-employee.git
+```
+
+
+Open project folder:
+
+```bash
+cd iubat-employee
+```
+
+
+Run the project:
+
+```text
+Open index.html in your browser
+```
+
+
+No framework or build tool required.
+
+
+---
+
+# 🔧 Supabase Configuration
+
+
+This project uses Supabase for employee data management.
+
+
+Create an Employee table:
+
 
 ```sql
 CREATE TABLE Employee (
@@ -81,123 +285,136 @@ CREATE TABLE Employee (
     "Room" TEXT,
     "Email" TEXT,
     "Cell" TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
 );
 ```
 
-4. **Enable Row Level Security (RLS)** and create policies:
+
+Enable public read access:
+
 
 ```sql
 ALTER TABLE Employee ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow public read access"
-    ON Employee
-    FOR SELECT
-    TO public
-    USING (true);
+ON Employee
+FOR SELECT
+TO public
+USING (true);
 ```
 
-5. **Update the configuration** in `script.js`:
+
+Add Supabase credentials inside:
 
 ```javascript
-// Supabase Configuration
-const SUPABASE_URL = "YOUR_SUPABASE_URL";
-const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY";
-const TABLE_NAME = "Employee";
+script.js
 ```
 
-## 📖 Usage
-
-### Searching Employees
-
-- Type any part of a name, designation, or department in the search bar
-- Results update instantly as you type
-- Clear the search with the × button
-- Press Enter or click the search button for explicit search
-
-### Viewing Employee Details
-
-Each employee card displays:
-
-- Full name
-- Designation
-- Department/Office
-- Room number (if available)
-- Email address (tap to email)
-- Phone number (tap to call)
-
-### Actions
-
-- **Copy** – Copies all employee details to clipboard
-- **Share** – Shares employee details via native share dialog
-- **Tap Email** – Opens default email client
-- **Tap Phone** – Opens phone dialer
-
-### Request/Update
-
-- Click the floating action button (FAB) to request updates or report errors
-- Contact via email, Facebook, or WhatsApp
-
-## 📁 Project Structure
-
-```
-iubat-employee/
-├── index.html          # Main HTML structure
-├── style.css           # All styles and responsive design
-├── script.js           # Application logic and Supabase integration
-└── README.md           # This file
-```
-
-## 🛠 Technologies Used
-
-| Technology            | Purpose                                       |
-| --------------------- | --------------------------------------------- |
-| **HTML5**             | Semantic markup structure                     |
-| **CSS3**              | Custom styling with CSS variables and flexbox |
-| **JavaScript (ES6+)** | Application logic and DOM manipulation        |
-| **Supabase**          | Backend database and API                      |
-| **Google Fonts**      | Fraunces, Inter, and IBM Plex Mono fonts      |
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-### Guidelines
-
-- Follow existing code style
-- Test on multiple browsers
-- Update documentation as needed
-- Keep commits atomic and descriptive
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` file for more information.
-
-## 📬 Contact
-
-**Developer:** Shawn  
-**Email:** shawn.iubat@gmail.com  
-**Facebook:** [shawnazd](https://facebook.com/shawnazd)  
-**WhatsApp:** +880 1873 319733  
-**GitHub:** [shawn-cse](https://github.com/shawn-cse)
-
-**Project Link:** [https://github.com/shawn-cse/iubat-employee](https://github.com/shawn-cse/iubat-employee)
 
 ---
 
+# 📖 Usage
+
+
+### Search Employees
+
+Users can search employees by:
+
+- Name
+- Designation
+- Department
+
+
+### Employee Actions
+
+Available actions:
+
+✅ Copy details  
+✅ Share information  
+✅ Send email  
+✅ Make phone calls  
+
+
+---
+
+# 🚀 Deployment
+
+
+Deployment platform:
+
+```
+GitHub Pages
+```
+
+
+Steps:
+
+```
+Repository Settings
+        ↓
+Pages
+        ↓
+Deploy from main branch
+        ↓
+Save
+```
+
+
+---
+
+# 🔮 Future Improvements
+
+
+- Admin dashboard
+- Employee update requests
+- Authentication system
+- Advanced filtering
+- Employee profile pages
+- Dark mode
+- Department analytics
+- QR profile sharing
+- Mobile application
+
+
+---
+
+# 👨‍💻 Developer
+
+
 <div align="center">
-  <sub>Built with ❤️ for the IUBAT Community</sub>
+
+
+## Developed by **Shawn**
+
+
+<a href="https://github.com/shawn-cse">
+
+<img src="https://img.shields.io/badge/GitHub-shawn--cse-181717?style=for-the-badge&logo=github" />
+
+</a>
+
+
+<a href="mailto:shawn.iubat@gmail.com">
+
+<img src="https://img.shields.io/badge/Email-shawn.iubat@gmail.com-EA4335?style=for-the-badge&logo=gmail" />
+
+</a>
+
+
 </div>
 
-## 🙏 Acknowledgments
 
-- IUBAT administration for providing the data
-- Supabase for the excellent backend service
-- All contributors and users of this directory
+---
+
+# ⭐ Support
+
+
+If this project is useful for the IUBAT community, consider giving it a ⭐ on GitHub.
+
+
+<div align="center">
+
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:C8102E,40:B78628,100:006F3C&height=130&section=footer" />
+
+</div>
