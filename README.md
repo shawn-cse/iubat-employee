@@ -1,6 +1,6 @@
 # IUBAT Employee Roster
 
-A colorful, compact, and fully responsive employee directory for the International University of Business Agriculture and Technology (IUBAT). This edition preserves the original card-based identity and practical contact actions while adding stronger filtering, sorting, accessibility, data resilience, and responsive behavior.
+A colorful, compact, and fully responsive employee directory for the International University of Business Agriculture and Technology (IUBAT). This edition preserves the original card-based identity and practical contact actions while adding faster search, accessibility, data resilience, and responsive behavior.
 
 ## Project owner
 
@@ -29,7 +29,7 @@ A colorful, compact, and fully responsive employee directory for the Internation
 - Color-coded card accents for a lively but consistent visual system
 - Original green IUBAT identity retained
 - Elegant Fraunces headings with readable Plus Jakarta Sans body text
-- Compact search, filters, stats, buttons, and contact rows
+- Compact search, stats, buttons, and contact rows
 - Responsive three-column, two-column, and one-column layouts
 - Proper list view for fast scanning
 - Clear hover states and native `title` text on important controls
@@ -39,9 +39,8 @@ A colorful, compact, and fully responsive employee directory for the Internation
 
 ## Functionality
 
-- Live employee search by name, designation, department, room, email, or phone
-- Department filter
-- Sorting by name, department, or designation
+- Instant employee search by name, designation, department, room, email, or phone
+- Pre-indexed search text and render-once cards for smooth typing and deletion
 - Grid and list views with saved view preference
 - Employee profile dialog
 - Email and tap-to-call actions
@@ -51,7 +50,7 @@ A colorful, compact, and fully responsive employee directory for the Internation
 - Loading skeletons
 - Empty, retry, and error states
 - Cached data fallback when the live database is temporarily unavailable
-- Search and filter reset
+- Instant search clearing
 - Back-to-top control
 - Keyboard-accessible dialogs with focus trapping and Escape-to-close
 
@@ -216,10 +215,7 @@ The root `index.html` redirects to the website inside `frontend/`.
 
 - Desktop, tablet, and mobile layout
 - No horizontal page overflow
-- Search and clear search
-- Department filtering
-- Sorting
-- Reset filters
+- Search while typing and clear search
 - Grid and list views
 - Profile dialog
 - Request/update dialog

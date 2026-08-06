@@ -27,13 +27,12 @@
   const state = {
     employees: [],
     filteredEmployees: [],
+    cardEntries: [],
     query: "",
-    department: "",
-    sort: "name-asc",
     view: storedView === "list" ? "list" : "grid",
     activeModal: null,
     lastFocusedElement: null,
-    debounceTimer: null,
+    searchFrame: null,
     toastTimer: null,
   };
 
@@ -41,9 +40,6 @@
     searchInput: document.getElementById("searchInput"),
     searchBtn: document.getElementById("searchBtn"),
     clearSearchBtn: document.getElementById("clearSearchBtn"),
-    departmentFilter: document.getElementById("departmentFilter"),
-    sortSelect: document.getElementById("sortSelect"),
-    resetFiltersBtn: document.getElementById("resetFiltersBtn"),
     emptyResetBtn: document.getElementById("emptyResetBtn"),
     gridViewBtn: document.getElementById("gridViewBtn"),
     listViewBtn: document.getElementById("listViewBtn"),
@@ -143,18 +139,6 @@
     return `${words[0][0]}${words[words.length - 1][0]}`.toUpperCase();
   }
 
-  function employeeKey(employee, index) {
-    const explicitId = employee?.id ?? employee?.ID;
-    if (explicitId != null && String(explicitId).trim()) return String(explicitId);
-
-    return [
-      getEmployeeValue(employee, COL.name),
-      getEmployeeValue(employee, COL.designation),
-      getEmployeeValue(employee, COL.department),
-      getEmployeeValue(employee, COL.email),
-      getEmployeeValue(employee, COL.phone),
-    ].join("|");
-  }
 
   function employeeTone(employee) {
     const seed = `${getEmployeeValue(employee, COL.department)}|${getEmployeeValue(employee, COL.name)}`;
@@ -287,23 +271,6 @@
     )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
   }
 
-  function populateDepartmentFilter() {
-    const departments = uniqueDepartments(state.employees);
-    const currentValue = state.department;
-    elements.departmentFilter.innerHTML = '<option value="">All departments</option>';
-
-    const fragment = document.createDocumentFragment();
-    departments.forEach((department) => {
-      const option = document.createElement("option");
-      option.value = department;
-      option.textContent = department;
-      fragment.appendChild(option);
-    });
-    elements.departmentFilter.appendChild(fragment);
-    elements.departmentFilter.value = departments.includes(currentValue) ? currentValue : "";
-    state.department = elements.departmentFilter.value;
-  }
-
   function updateStats() {
     const total = state.employees.length;
     const departments = uniqueDepartments(state.employees).length;
@@ -317,35 +284,8 @@
     elements.contactCoverage.textContent = `${coverage}%`;
   }
 
-  function compareText(a, b) {
-    return a.localeCompare(b, undefined, { sensitivity: "base", numeric: true });
-  }
-
-  function sortEmployees(employees) {
-    const sorted = [...employees];
-    const [field, direction] = state.sort.split("-");
-    const column = field === "department"
-      ? COL.department
-      : field === "designation"
-        ? COL.designation
-        : COL.name;
-
-    sorted.sort((a, b) => {
-      const result = compareText(getEmployeeValue(a, column), getEmployeeValue(b, column));
-      return direction === "desc" ? -result : result;
-    });
-    return sorted;
-  }
-
-  function employeeMatches(employee) {
-    if (state.department && getEmployeeValue(employee, COL.department) !== state.department) {
-      return false;
-    }
-
-    const query = normalize(state.query);
-    if (!query) return true;
-
-    const searchable = [
+  function buildSearchIndex(employee) {
+    return [
       COL.name,
       COL.designation,
       COL.department,
@@ -353,8 +293,6 @@
       COL.email,
       COL.phone,
     ].map((column) => normalize(getEmployeeValue(employee, column))).join(" ");
-
-    return searchable.includes(query);
   }
 
   function employeeCardTemplate(employee, index) {
@@ -364,7 +302,7 @@
     const room = formatRoom(getEmployeeValue(employee, COL.room));
     const email = safeEmail(getEmployeeValue(employee, COL.email));
     const phone = phoneParts(getEmployeeValue(employee, COL.phone));
-    const key = escapeHtml(employeeKey(employee, index));
+    const employeeIndex = Number(index);
 
     const details = [
       department && `<li>${icons.building}<span title="${escapeHtml(department)}">${escapeHtml(department)}</span></li>`,
@@ -377,7 +315,7 @@
     ].filter(Boolean).join("");
 
     return `
-      <li class="employee-card employee-card--tone-${employeeTone(employee)}" data-employee-key="${key}">
+      <li class="employee-card employee-card--tone-${employeeTone(employee)}" data-employee-index="${employeeIndex}">
         <article>
           <div class="employee-card__header">
             <div class="avatar" aria-hidden="true">${escapeHtml(initials(name))}</div>
@@ -407,45 +345,55 @@
 
   function renderEmployees() {
     elements.employeeList.classList.toggle("employee-grid--list", state.view === "list");
-    elements.employeeList.innerHTML = state.filteredEmployees
+    elements.employeeList.innerHTML = state.employees
       .map(employeeCardTemplate)
       .join("");
 
-    elements.employeeList.querySelectorAll(".employee-card").forEach((card, index) => {
+    state.cardEntries = [...elements.employeeList.querySelectorAll(".employee-card")].map((card, index) => {
       card.style.setProperty("--delay", `${Math.min(index, 12) * 35}ms`);
+      return {
+        card,
+        employee: state.employees[index],
+        searchText: buildSearchIndex(state.employees[index]),
+      };
     });
   }
 
   function updateResultSummary() {
     const shown = state.filteredEmployees.length;
     const total = state.employees.length;
-    const active = Boolean(state.query || state.department);
 
     if (!total) {
       elements.resultSummary.textContent = "No employees are currently available.";
       return;
     }
 
-    if (active) {
+    if (state.query) {
       elements.resultSummary.textContent = `Showing ${shown.toLocaleString()} of ${total.toLocaleString()} employees`;
     } else {
       elements.resultSummary.textContent = `${total.toLocaleString()} employee${total === 1 ? "" : "s"} available`;
     }
   }
 
-  function updateFilterControls() {
-    const active = Boolean(state.query || state.department || state.sort !== "name-asc");
-    elements.resetFiltersBtn.disabled = !active;
+  function updateSearchControls() {
     elements.clearSearchBtn.hidden = !state.query;
   }
 
   function applyFilters() {
-    state.filteredEmployees = sortEmployees(state.employees.filter(employeeMatches));
-    renderEmployees();
-    updateResultSummary();
-    updateFilterControls();
+    const query = normalize(state.query);
+    const matches = [];
 
-    const empty = state.filteredEmployees.length === 0;
+    state.cardEntries.forEach((entry) => {
+      const visible = !query || entry.searchText.includes(query);
+      entry.card.hidden = !visible;
+      if (visible) matches.push(entry.employee);
+    });
+
+    state.filteredEmployees = matches;
+    updateResultSummary();
+    updateSearchControls();
+
+    const empty = matches.length === 0;
     elements.emptyState.hidden = !empty;
     elements.employeeList.hidden = empty;
   }
@@ -469,8 +417,8 @@
       state.employees = employees;
       saveCache(employees);
       elements.errorState.hidden = true;
-      populateDepartmentFilter();
       updateStats();
+      renderEmployees();
       applyFilters();
     } catch (error) {
       console.error("Failed to load employee directory:", error);
@@ -478,8 +426,8 @@
 
       if (cache) {
         state.employees = cache.employees;
-        populateDepartmentFilter();
         updateStats();
+        renderEmployees();
         applyFilters();
         const ageHours = Math.max(1, Math.round((Date.now() - cache.savedAt) / 3_600_000));
         showDataNotice(`Live data is unavailable. Showing the last saved directory from about ${ageHours} hour${ageHours === 1 ? "" : "s"} ago.`);
@@ -494,13 +442,13 @@
     }
   }
 
-  function resetFilters({ focusSearch = false } = {}) {
+  function clearSearch({ focusSearch = false } = {}) {
+    if (state.searchFrame) {
+      cancelAnimationFrame(state.searchFrame);
+      state.searchFrame = null;
+    }
     state.query = "";
-    state.department = "";
-    state.sort = "name-asc";
     elements.searchInput.value = "";
-    elements.departmentFilter.value = "";
-    elements.sortSelect.value = "name-asc";
     applyFilters();
     if (focusSearch) elements.searchInput.focus();
   }
@@ -516,13 +464,12 @@
     elements.gridViewBtn.setAttribute("aria-pressed", String(view === "grid"));
     elements.listViewBtn.classList.toggle("is-active", view === "list");
     elements.listViewBtn.setAttribute("aria-pressed", String(view === "list"));
-    renderEmployees();
+    elements.employeeList.classList.toggle("employee-grid--list", view === "list");
   }
 
   function findEmployeeFromCard(card) {
-    const key = card?.dataset.employeeKey;
-    return state.filteredEmployees.find((employee, index) => employeeKey(employee, index) === key)
-      || state.employees.find((employee, index) => employeeKey(employee, index) === key);
+    const index = Number(card?.dataset.employeeIndex);
+    return Number.isInteger(index) ? state.employees[index] : null;
   }
 
   function profileModalTemplate(employee) {
@@ -629,50 +576,42 @@
     showToast("Sharing is unavailable, so the details were copied.");
   }
 
+  function runSearchNow() {
+    if (state.searchFrame) {
+      cancelAnimationFrame(state.searchFrame);
+      state.searchFrame = null;
+    }
+    state.query = elements.searchInput.value;
+    applyFilters();
+  }
+
   function handleSearchInput() {
     state.query = elements.searchInput.value;
-    elements.clearSearchBtn.hidden = !state.query;
-    clearTimeout(state.debounceTimer);
-    state.debounceTimer = setTimeout(applyFilters, 140);
+    updateSearchControls();
+
+    if (state.searchFrame) cancelAnimationFrame(state.searchFrame);
+    state.searchFrame = requestAnimationFrame(() => {
+      state.searchFrame = null;
+      applyFilters();
+    });
   }
 
   elements.searchInput.addEventListener("input", handleSearchInput);
   elements.searchInput.addEventListener("keydown", (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      clearTimeout(state.debounceTimer);
-      state.query = elements.searchInput.value;
-      applyFilters();
+      runSearchNow();
       document.getElementById("directory").scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
 
   elements.searchBtn.addEventListener("click", () => {
-    clearTimeout(state.debounceTimer);
-    state.query = elements.searchInput.value;
-    applyFilters();
+    runSearchNow();
     document.getElementById("directory").scrollIntoView({ behavior: "smooth", block: "start" });
   });
 
-  elements.clearSearchBtn.addEventListener("click", () => {
-    state.query = "";
-    elements.searchInput.value = "";
-    applyFilters();
-    elements.searchInput.focus();
-  });
-
-  elements.departmentFilter.addEventListener("change", () => {
-    state.department = elements.departmentFilter.value;
-    applyFilters();
-  });
-
-  elements.sortSelect.addEventListener("change", () => {
-    state.sort = elements.sortSelect.value;
-    applyFilters();
-  });
-
-  elements.resetFiltersBtn.addEventListener("click", () => resetFilters({ focusSearch: true }));
-  elements.emptyResetBtn.addEventListener("click", () => resetFilters({ focusSearch: true }));
+  elements.clearSearchBtn.addEventListener("click", () => clearSearch({ focusSearch: true }));
+  elements.emptyResetBtn.addEventListener("click", () => clearSearch({ focusSearch: true }));
   elements.retryBtn.addEventListener("click", loadDirectory);
   elements.gridViewBtn.addEventListener("click", () => setView("grid"));
   elements.listViewBtn.addEventListener("click", () => setView("list"));

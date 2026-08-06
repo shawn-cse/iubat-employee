@@ -89,34 +89,6 @@
             </div>
           </div>
 
-          <div class="filter-bar" aria-label="Directory filters">
-            <div class="field field--grow">
-              <label for="departmentFilter">Department</label>
-              <div class="select-wrap">
-                <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h.01M9 14h.01M15 10h.01M15 14h.01"/></svg>
-                <select id="departmentFilter"><option value="">All departments</option></select>
-                <svg class="select-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
-              </div>
-            </div>
-            <div class="field">
-              <label for="sortSelect">Sort by</label>
-              <div class="select-wrap">
-                <svg class="field-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h12M3 12h9M3 18h6M18 5v14M15 16l3 3 3-3"/></svg>
-                <select id="sortSelect">
-                  <option value="name-asc">Name: A–Z</option>
-                  <option value="name-desc">Name: Z–A</option>
-                  <option value="department-asc">Department: A–Z</option>
-                  <option value="designation-asc">Designation: A–Z</option>
-                </select>
-                <svg class="select-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>
-              </div>
-            </div>
-            <button id="resetFiltersBtn" class="btn btn--ghost filter-bar__reset" type="button" title="Clear search, filter, and sorting" disabled>
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
-              Reset
-            </button>
-          </div>
-
           <div id="dataNotice" class="data-notice" role="status" hidden>
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
             <span id="dataNoticeText"></span>
@@ -137,8 +109,8 @@
           <div id="emptyState" class="state-card" hidden>
             <span class="state-card__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6M8.5 11h5"/></svg></span>
             <h3>No employee found</h3>
-            <p>Try another keyword or clear the active filters.</p>
-            <button id="emptyResetBtn" class="btn btn--outline" type="button">Clear filters</button>
+            <p>Try another keyword or clear your search.</p>
+            <button id="emptyResetBtn" class="btn btn--outline" type="button">Clear search</button>
           </div>
 
           <ul id="employeeList" class="employee-grid" aria-live="polite" aria-busy="true"></ul>
