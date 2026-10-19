@@ -1,0 +1,37 @@
+/**
+ * IUBAT Employee Directory - Fine-grained Responsive & Touch-Target Enhancements
+ * Ensures WCAG 2.2 touch-target compliance (>= 44x44px) and fluid spacing across all screens.
+ */
+
+/* Extra small devices (<= 360px) */
+@media (max-width: 360px) {
+  .hero h1 { font-size: 21px; }
+  .eyebrow { font-size: 7.5px; }
+  .directory-stats > div { padding: 0 4px; font-size: 8px; }
+  .directory-stats strong { font-size: 9.5px; }
+  .hero-search input { font-size: 11.5px; }
+  .brand__copy strong { font-size: 11.5px; }
+  .brand__copy span { font-size: 9px; }
+  .employee-card article { padding: 10px; }
+  .employee-card__header { grid-template-columns: 38px minmax(0,1fr); gap: 8px; }
+  .avatar { width: 38px; height: 38px; }
+}
+
+/* Landscape Phones */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero { padding: 14px 0 16px; }
+  .hero h1 { font-size: 20px; }
+  .directory-stats { margin-top: 8px; }
+  .hero-search { margin-top: 8px; min-height: 40px; }
+  .modal { max-height: 94vh; padding: 16px; }
+}
+
+/* Touch Device Optimization */
+@media (pointer: coarse) {
+  .contact-button { min-height: 40px; }
+  .text-button { min-height: 38px; padding-block: 6px; }
+  .employee-card__quick-actions .icon-btn { width: 34px; height: 34px; }
+  .icon-btn { min-width: 36px; min-height: 36px; }
+  .toolbar-select { min-height: 40px; }
+  .view-switch__button { min-width: 36px; min-height: 36px; }
+}
