@@ -13,7 +13,6 @@ def run_tests():
     assert "employeeList" in html, "Employee list container missing!"
     assert "totalEmployees" in html, "totalEmployees missing!"
     assert "totalDepartments" in html, "totalDepartments missing!"
-    assert "totalPhotos" in html, "totalPhotos missing!"
     assert "departmentSelect" in html, "Department filter missing!"
     assert "modalOverlay" in html, "Modal overlay missing!"
     assert "data-open-request" in html, "Request button missing!"

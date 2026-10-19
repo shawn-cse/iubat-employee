@@ -57,7 +57,6 @@
     resultSummary: document.getElementById("resultSummary"),
     totalEmployees: document.getElementById("totalEmployees"),
     totalDepartments: document.getElementById("totalDepartments"),
-    totalPhotos: document.getElementById("totalPhotos"),
     dataNotice: document.getElementById("dataNotice"),
     dataNoticeText: document.getElementById("dataNoticeText"),
     modalOverlay: document.getElementById("modalOverlay"),
@@ -303,11 +302,9 @@
   function updateStats() {
     const total = state.employees.length;
     const depts = uniqueDepartments(state.employees).length;
-    const photosCount = state.employees.filter((emp) => emp.hasRealPhoto || (emp.photo && !emp.photo.includes("placeholder"))).length;
 
     if (elements.totalEmployees) elements.totalEmployees.textContent = total.toLocaleString();
     if (elements.totalDepartments) elements.totalDepartments.textContent = depts.toLocaleString();
-    if (elements.totalPhotos) elements.totalPhotos.textContent = photosCount.toLocaleString();
   }
 
   function populateDepartmentSelect() {
