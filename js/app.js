@@ -477,6 +477,23 @@
       updateStats();
       populateDepartmentSelect();
       renderEmployees();
+
+      // Read optional URL parameters (e.g. ?q=john or ?dept=CSE)
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialQuery = urlParams.get("q") || urlParams.get("search");
+        const initialDept = urlParams.get("dept") || urlParams.get("department");
+        if (initialQuery) {
+          state.query = initialQuery;
+          if (elements.searchInput) elements.searchInput.value = initialQuery;
+        }
+        if (initialDept) {
+          state.selectedDepartment = initialDept;
+          if (elements.departmentSelect) elements.departmentSelect.value = initialDept;
+        }
+      } catch (_) {}
+
+      updateMobileSearchState();
       applyFilters();
     } catch (error) {
       console.warn("Direct fetch failed, checking local cache...", error);
@@ -513,7 +530,14 @@
     state.selectedDepartment = "";
     if (elements.departmentSelect) elements.departmentSelect.value = "";
     applyFilters();
-    if (focusSearch && elements.searchInput) elements.searchInput.focus();
+    updateMobileSearchState();
+    if (focusSearch && elements.searchInput) {
+      elements.searchInput.focus();
+    } else {
+      document.body.classList.remove("is-search-active");
+      const heroEl = document.querySelector(".hero");
+      if (heroEl) heroEl.classList.remove("is-search-active");
+    }
   }
 
   function setView(view) {
@@ -550,7 +574,6 @@
     const phone = phoneParts(getEmployeeProp(employee, "phone") || getEmployeeProp(employee, "cell"));
     const qualifications = getEmployeeProp(employee, "qualifications");
     const address = getEmployeeProp(employee, "presentAddress");
-    const sourcePage = employee.sourcePage ? `Page ${employee.sourcePage}` : "";
     const photo = employee.photo || "";
 
     const avatarHtml = employee.hasRealPhoto !== false && photo
@@ -575,7 +598,6 @@
           <div class="full-width"><dt>Official Email</dt><dd>${email ? `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>` : "Not provided"}</dd></div>
           ${qualifications ? `<div class="full-width"><dt>Academic Qualifications</dt><dd>${escapeHtml(qualifications)}</dd></div>` : ""}
           ${address ? `<div class="full-width"><dt>Address</dt><dd>${escapeHtml(address)}</dd></div>` : ""}
-          ${sourcePage ? `<div><dt>Source Record</dt><dd>${escapeHtml(sourcePage)}</dd></div>` : ""}
         </dl>
         <div class="modal__actions">
           ${email ? `<a class="btn btn--primary" href="mailto:${escapeHtml(email)}">${icons.mail} Send email</a>` : ""}
@@ -641,18 +663,51 @@
     }, 180);
   }
 
+  function updateMobileSearchState() {
+    const hasQuery = Boolean(state.query && state.query.trim());
+    const isFocused = document.activeElement === elements.searchInput;
+    const shouldBeActive = hasQuery || (isFocused && window.innerWidth <= 768);
+
+    document.body.classList.toggle("is-search-active", shouldBeActive);
+    const heroEl = document.querySelector(".hero");
+    if (heroEl) {
+      heroEl.classList.toggle("is-search-active", shouldBeActive);
+    }
+  }
+
+  function handleSearchFocus() {
+    if (window.innerWidth <= 768) {
+      document.body.classList.add("is-search-active");
+      const heroEl = document.querySelector(".hero");
+      if (heroEl) heroEl.classList.add("is-search-active");
+      requestAnimationFrame(() => {
+        elements.searchInput?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    }
+  }
+
+  function handleSearchBlur() {
+    if (!elements.searchInput?.value.trim()) {
+      document.body.classList.remove("is-search-active");
+      const heroEl = document.querySelector(".hero");
+      if (heroEl) heroEl.classList.remove("is-search-active");
+    }
+  }
+
   function runSearchNow() {
     if (state.searchFrame) {
       cancelAnimationFrame(state.searchFrame);
       state.searchFrame = null;
     }
     state.query = elements.searchInput.value;
+    updateMobileSearchState();
     applyFilters();
   }
 
   function handleSearchInput() {
     state.query = elements.searchInput.value;
     updateSearchControls();
+    updateMobileSearchState();
 
     if (state.searchFrame) cancelAnimationFrame(state.searchFrame);
     state.searchFrame = requestAnimationFrame(() => {
@@ -664,6 +719,8 @@
   function bindEvents() {
     if (elements.searchInput) {
       elements.searchInput.addEventListener("input", handleSearchInput);
+      elements.searchInput.addEventListener("focus", handleSearchFocus);
+      elements.searchInput.addEventListener("blur", handleSearchBlur);
       elements.searchInput.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault();

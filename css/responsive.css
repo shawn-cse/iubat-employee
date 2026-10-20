@@ -6,32 +6,34 @@
 /* Extra small devices (<= 360px) */
 @media (max-width: 360px) {
   .hero h1 { font-size: 21px; }
-  .eyebrow { font-size: 7.5px; }
-  .directory-stats > div { padding: 0 4px; font-size: 8px; }
-  .directory-stats strong { font-size: 9.5px; }
-  .hero-search input { font-size: 11.5px; }
-  .brand__copy strong { font-size: 11.5px; }
-  .brand__copy span { font-size: 9px; }
-  .employee-card article { padding: 10px; }
-  .employee-card__header { grid-template-columns: 38px minmax(0,1fr); gap: 8px; }
-  .avatar { width: 38px; height: 38px; }
+  .eyebrow { font-size: 9px; }
+  .directory-stats > div { padding: 0 6px; font-size: 10.5px; }
+  .directory-stats strong { font-size: 11.5px; }
+  .hero-search input { font-size: 16px; }
+  .brand__copy strong { font-size: 13px; }
+  .brand__copy span { font-size: 10.5px; }
+  .employee-card article { padding: 12px; }
+  .employee-card__header { grid-template-columns: 44px minmax(0,1fr); gap: 10px; }
+  .avatar { width: 44px; height: 44px; }
+  .employee-card__identity h3 { font-size: 15px; }
+  .employee-card__identity p { font-size: 12px; }
 }
 
 /* Landscape Phones */
 @media (max-height: 480px) and (orientation: landscape) {
-  .hero { padding: 14px 0 16px; }
+  .hero { padding: 12px 0 14px; position: static; }
   .hero h1 { font-size: 20px; }
-  .directory-stats { margin-top: 8px; }
-  .hero-search { margin-top: 8px; min-height: 40px; }
+  .directory-stats { margin-top: 6px; }
+  .hero-search { margin-top: 8px; min-height: 42px; }
   .modal { max-height: 94vh; padding: 16px; }
 }
 
 /* Touch Device Optimization */
 @media (pointer: coarse) {
-  .contact-button { min-height: 40px; }
-  .text-button { min-height: 38px; padding-block: 6px; }
-  .employee-card__quick-actions .icon-btn { width: 34px; height: 34px; }
-  .icon-btn { min-width: 36px; min-height: 36px; }
-  .toolbar-select { min-height: 40px; }
-  .view-switch__button { min-width: 36px; min-height: 36px; }
+  .contact-button { min-height: 42px; }
+  .text-button { min-height: 40px; padding-block: 8px; }
+  .employee-card__quick-actions .icon-btn { width: 36px; height: 36px; }
+  .icon-btn { min-width: 38px; min-height: 38px; }
+  .toolbar-select { min-height: 42px; }
+  .view-switch__button { min-width: 38px; min-height: 38px; }
 }
