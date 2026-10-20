@@ -220,7 +220,7 @@ docker run --rm -p 8088:80 -v $(pwd):/usr/share/nginx/html:ro nginx:alpine
 ### Connect & Support
 
 - **GitHub:** [@shawn-cse](https://github.com/shawn-cse)
-- **Email:** [shawnazd@gmail.com](mailto:shawnazd@gmail.com) / [shawn.cse@yahoo.com](mailto:shawn.cse@yahoo.com)
+- **Email:** [shawn.cse@yahoo.com](mailto:shawn.cse@yahoo.com)
 - **Facebook:** [shawnazd](https://facebook.com/shawnazd)
 - **WhatsApp:** [+880 1873-319733](https://wa.me/8801873319733)
 - **Project Repository:** [github.com/shawn-cse/iubat-employee](https://github.com/shawn-cse/iubat-employee)

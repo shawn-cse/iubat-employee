@@ -13,7 +13,8 @@
     CACHE_KEY: "iubat_employee_directory_cache_v3",
     CACHE_MAX_AGE_MS: 24 * 60 * 60 * 1000,
     CONTACT: Object.freeze({
-      email: "shawnazd@gmail.com",
+      email: "shawn.cse@yahoo.com",
+      github: "https://github.com/shawn-cse",
       facebook: "https://facebook.com/shawnazd",
       whatsapp: "https://wa.me/8801873319733",
     }),
@@ -104,16 +105,25 @@
 
   function getEmployeeProp(employee, key) {
     if (!employee) return "";
+    let val = "";
     if (employee[key] !== undefined && employee[key] !== null) {
-      return cleanValue(employee[key]);
-    }
-    const lowerKey = key.toLowerCase();
-    for (const k of Object.keys(employee)) {
-      if (k.toLowerCase() === lowerKey) {
-        return cleanValue(employee[k]);
+      val = cleanValue(employee[key]);
+    } else {
+      const lowerKey = key.toLowerCase();
+      for (const k of Object.keys(employee)) {
+        if (k.toLowerCase() === lowerKey) {
+          val = cleanValue(employee[k]);
+          break;
+        }
       }
     }
-    return "";
+    if (val && key.toLowerCase() === "name") {
+      val = val.replace(/^Dr\.(?=[A-Za-z])/i, "Dr. ");
+    }
+    if (val && key.toLowerCase() === "designation") {
+      val = val.replace(/&(?=\S)/g, "& ").replace(/(?<=\S)&/g, " & ");
+    }
+    return val;
   }
 
   function formatRoom(value, ext) {
@@ -618,6 +628,9 @@
         <div class="request-options">
           <a href="mailto:${escapeHtml(CONFIG.CONTACT.email)}?subject=IUBAT%20Employee%20Directory%20Update" class="request-option">
             <span>${icons.mail}</span><div><strong>Email</strong><small>${escapeHtml(CONFIG.CONTACT.email)}</small></div>${icons.arrow}
+          </a>
+          <a href="${escapeHtml(CONFIG.CONTACT.github)}" target="_blank" rel="noopener noreferrer" class="request-option">
+            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg></span><div><strong>GitHub</strong><small>shawn-cse</small></div>${icons.arrow}
           </a>
           <a href="${escapeHtml(CONFIG.CONTACT.facebook)}" target="_blank" rel="noopener noreferrer" class="request-option">
             <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></span><div><strong>Facebook</strong><small>Message shawnazd</small></div>${icons.arrow}
