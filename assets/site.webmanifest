@@ -1,0 +1,22 @@
+{
+  "name": "IUBAT Employee Roster",
+  "short_name": "IUBAT Roster",
+  "description": "Verified Faculty & Staff Directory for International University of Business Agriculture and Technology",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0d3b2c",
+  "theme_color": "#155f45",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/images/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

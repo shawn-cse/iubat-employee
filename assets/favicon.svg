@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A2540"/>
+      <stop offset="100%" stop-color="#0D47A1"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#favGrad)"/>
+  <!-- Academic Cap / Book Emblem -->
+  <path d="M32 14L14 23l18 9 18-9-18-9z" fill="#F1F5F9"/>
+  <path d="M20 28.5v11.2c0 6.6 5.4 12 12 12s12-5.4 12-12V28.5l-12 6-12-6z" fill="#00A86B"/>
+  <path d="M48 24.5v13.5c0 1.1-.9 2-2 2s-2-.9-2-2V25.5l4-1z" fill="#F59E0B"/>
+  <circle cx="46" cy="40" r="2.5" fill="#F59E0B"/>
+  <circle cx="32" cy="40" r="3" fill="#FFFFFF"/>
+</svg>

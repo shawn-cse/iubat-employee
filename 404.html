@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#155f45" />
+    <title>Page Not Found — IUBAT Employee Roster</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="assets/site.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
+  <body style="min-height: 100vh; display: flex; flex-direction: column;">
+    <header class="site-header" role="banner">
+      <div class="container site-header__inner">
+        <a class="brand" href="index.html" aria-label="IUBAT Employee Roster home">
+          <img src="assets/images/logo.png" alt="IUBAT Crest" class="brand__crest" width="34" height="34" />
+          <span class="brand__copy">
+            <strong>IUBAT</strong>
+            <span>Employee Roster</span>
+          </span>
+        </a>
+
+        <a class="btn btn--outline btn--compact" href="index.html">
+          <span>Return to Roster</span>
+        </a>
+      </div>
+    </header>
+
+    <main class="container" style="flex: 1; display: grid; place-items: center; padding: 48px 16px;">
+      <div class="state-card" style="margin: 0; max-width: 480px;">
+        <span class="state-card__icon state-card__icon--error" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M10.3 3.7 2.4 17.3A2 2 0 0 0 4.1 20h15.8a2 2 0 0 0 1.7-2.7L13.7 3.7a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+        </span>
+        <h1 style="font-family: var(--font-display); font-size: 26px; font-weight: 800; margin: 0 0 8px; color: var(--ink-strong);">Page Not Found (404)</h1>
+        <p style="color: var(--text-soft); font-size: 14px; margin: 0 0 20px;">
+          The page or link you requested is not available. You can browse and search all verified campus faculty and staff from the main employee roster.
+        </p>
+        <a href="index.html" class="btn btn--primary" style="display: inline-flex;">
+          Open Employee Roster
+        </a>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <div>
+          <strong>IUBAT Employee Roster</strong>
+          <p>Built for faster campus communication.</p>
+        </div>
+        <p class="site-footer__copyright">© 2026 International University of Business Agriculture and Technology</p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "iubat-employee-directory",
+  "version": "2.0.0",
+  "description": "Verified Faculty and Staff Directory for the International University of Business Agriculture and Technology (IUBAT)",
+  "main": "js/app.js",
+  "scripts": {
+    "start": "python -m http.server 8088",
+    "dev": "python -m http.server 8088",
+    "test": "python scripts/verify_database.py",
+    "rebuild": "python scripts/rebuild_database.py",
+    "export:csv": "python scripts/export_csv.py"
+  },
+  "keywords": [
+    "iubat",
+    "faculty-directory",
+    "university-roster",
+    "employee-directory",
+    "vanilla-javascript",
+    "responsive-web"
+  ],
+  "author": "shawn-cse",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shawn-cse/iubat-employee.git"
+  }
+}
