@@ -665,188 +665,70 @@
 
   function requestModalTemplate() {
     return `
-      <div class="request-modal">
-        <div class="request-modal__header">
-          <p class="modal__eyebrow">Directory Support & Updates</p>
-          <h2 id="modalTitle">Submit Directory Update</h2>
-          <p class="modal__lead">Suggest a profile correction, report updated room/contact numbers, or submit new additions.</p>
+      <div class="direct-contact-modal">
+        <div class="modal__header">
+          <div class="modal__icon-badge">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </div>
+          <p class="modal__eyebrow">Direct Contact &amp; Support</p>
+          <h2 id="modalTitle">Get in Touch</h2>
+          <p class="modal__lead">Reach out directly for profile updates, directory additions, feedback, or inquiries.</p>
         </div>
 
-        <form id="updateRequestForm" class="update-form" novalidate>
-          <div class="form-group">
-            <label for="reqType">Request Type <span class="required">*</span></label>
-            <select id="reqType" class="form-control" required>
-              <option value="correction">Profile Information Correction</option>
-              <option value="new_listing">New Faculty / Staff Addition</option>
-              <option value="contact_update">Phone / Email / Room Update</option>
-              <option value="leave_status">Study Leave Status Update</option>
-              <option value="other">General Directory Inquiry</option>
-            </select>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="reqName">Faculty / Staff Name <span class="required">*</span></label>
-              <input type="text" id="reqName" class="form-control" placeholder="e.g. Dr. Md. Ismail Hossain" required autocomplete="name" />
-              <span class="field-error" id="reqNameError">Please enter a valid name (at least 2 characters).</span>
+        <div class="direct-contact-cards">
+          <a class="direct-card" href="mailto:${escapeHtml(CONFIG.CONTACT.email)}?subject=IUBAT%20Directory%20Inquiry" title="Send email to Shawn">
+            <div class="direct-card__icon direct-card__icon--mail">
+              ${icons.mail}
             </div>
-            <div class="form-group">
-              <label for="reqDept">Department / Office <span class="required">*</span></label>
-              <input type="text" id="reqDept" class="form-control" placeholder="e.g. Computer Science & Engineering" required />
-              <span class="field-error" id="reqDeptError">Please provide the department or office.</span>
+            <div class="direct-card__body">
+              <strong>Email Developer</strong>
+              <span>${escapeHtml(CONFIG.CONTACT.email)}</span>
             </div>
-          </div>
+            <svg class="direct-card__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
 
-          <div class="form-group">
-            <label for="reqEmail">Your Contact Email <span class="required">*</span></label>
-            <input type="email" id="reqEmail" class="form-control" placeholder="e.g. yourname@iubat.edu or personal email" required autocomplete="email" />
-            <span class="field-error" id="reqEmailError">Please provide a valid email address.</span>
-          </div>
+          <a class="direct-card" href="${escapeHtml(CONFIG.CONTACT.whatsapp)}" target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">
+            <div class="direct-card__icon direct-card__icon--whatsapp">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l5.9-1.6A11.8 11.8 0 0 0 20.5 3.5ZM12 21a9.7 9.7 0 0 1-4.9-1.3l-.4-.2-3.5 1 1-3.4-.2-.4A9.7 9.7 0 1 1 12 21Z"/><path d="M8.6 6.8c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 3s1.3 3.5 1.5 3.7c.2.2 2.6 4 6.3 5.6 3.1 1.4 3.7 1.1 4.4 1 .7-.1 2.2-.9 2.5-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5l-2.6-1.2c-.4-.1-.7-.2-1 .2l-1.1 1.4c-.3.3-.5.3-.9.1a8 8 0 0 1-2.3-1.4 8.7 8.7 0 0 1-1.6-2c-.2-.4 0-.6.1-.8l.6-.7.4-.7c.1-.3 0-.5 0-.7L9.8 7.3c-.3-.7-.6-.6-1.2-.5Z"/></svg>
+            </div>
+            <div class="direct-card__body">
+              <strong>WhatsApp Direct</strong>
+              <span>${escapeHtml(CONFIG.CONTACT.whatsappDisplay)}</span>
+            </div>
+            <svg class="direct-card__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
 
-          <div class="form-group">
-            <label for="reqDetails">Details of Update / Changes <span class="required">*</span></label>
-            <textarea id="reqDetails" class="form-control" rows="3" placeholder="Please specify the updated designation, room number, phone number, email, or new listing information..." required></textarea>
-            <span class="field-error" id="reqDetailsError">Please provide at least 10 characters detailing the update.</span>
-          </div>
+          <a class="direct-card" href="${escapeHtml(CONFIG.CONTACT.github)}" target="_blank" rel="noopener noreferrer" title="View GitHub repository">
+            <div class="direct-card__icon direct-card__icon--github">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+            </div>
+            <div class="direct-card__body">
+              <strong>GitHub Repository</strong>
+              <span>github.com/shawn-cse/iubat-employee</span>
+            </div>
+            <svg class="direct-card__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
 
-          <div class="form-actions">
-            <button type="submit" class="btn btn--primary" id="submitUpdateBtn">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-              <span>Submit Update</span>
-            </button>
-          </div>
-        </form>
-
-        <div class="direct-contact-divider">
-          <span>Or reach out directly</span>
+          <a class="direct-card" href="${escapeHtml(CONFIG.CONTACT.facebook)}" target="_blank" rel="noopener noreferrer" title="Message on Facebook">
+            <div class="direct-card__icon direct-card__icon--facebook">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg>
+            </div>
+            <div class="direct-card__body">
+              <strong>Facebook Profile</strong>
+              <span>facebook.com/shawnazd</span>
+            </div>
+            <svg class="direct-card__arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
         </div>
 
-        <div class="request-options">
-          <a href="mailto:${escapeHtml(CONFIG.CONTACT.email)}?subject=IUBAT%20Directory%20Update" class="request-option">
-            <span>${icons.mail}</span>
-            <div><strong>Email Coordinator</strong><small>${escapeHtml(CONFIG.CONTACT.email)}</small></div>
-            ${icons.arrow}
-          </a>
-          <a href="${escapeHtml(CONFIG.CONTACT.whatsapp)}" target="_blank" rel="noopener noreferrer" class="request-option">
-            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l5.9-1.6A11.8 11.8 0 0 0 20.5 3.5ZM12 21a9.7 9.7 0 0 1-4.9-1.3l-.4-.2-3.5 1 1-3.4-.2-.4A9.7 9.7 0 1 1 12 21Z"/><path d="M8.6 6.8c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 3s1.3 3.5 1.5 3.7c.2.2 2.6 4 6.3 5.6 3.1 1.4 3.7 1.1 4.4 1 .7-.1 2.2-.9 2.5-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5l-2.6-1.2c-.4-.1-.7-.2-1 .2l-1.1 1.4c-.3.3-.5.3-.9.1a8 8 0 0 1-2.3-1.4 8.7 8.7 0 0 1-1.6-2c-.2-.4 0-.6.1-.8l.6-.7.4-.7c.1-.3 0-.5 0-.7L9.8 7.3c-.3-.7-.6-.6-1.2-.5Z"/></svg></span>
-            <div><strong>WhatsApp Direct</strong><small>${escapeHtml(CONFIG.CONTACT.whatsappDisplay)}</small></div>
-            ${icons.arrow}
-          </a>
-          <a href="${escapeHtml(CONFIG.CONTACT.github)}" target="_blank" rel="noopener noreferrer" class="request-option">
-            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg></span>
-            <div><strong>GitHub Repository</strong><small>shawn-cse / iubat-employee</small></div>
-            ${icons.arrow}
-          </a>
-          <a href="${escapeHtml(CONFIG.CONTACT.facebook)}" target="_blank" rel="noopener noreferrer" class="request-option">
-            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></span>
-            <div><strong>Facebook Messenger</strong><small>shawnazd</small></div>
-            ${icons.arrow}
-          </a>
+        <div class="modal__footer-action">
+          <button type="button" class="btn btn--outline" id="copyContactInfoBtn" style="width: 100%;">
+            ${icons.copy}
+            <span>Copy All Contact Info</span>
+          </button>
         </div>
       </div>
     `;
-  }
-
-  function handleFormValidationAndSubmission() {
-    const form = document.getElementById("updateRequestForm");
-    if (!form) return;
-
-    const reqName = document.getElementById("reqName");
-    const reqDept = document.getElementById("reqDept");
-    const reqEmail = document.getElementById("reqEmail");
-    const reqDetails = document.getElementById("reqDetails");
-    const reqType = document.getElementById("reqType");
-
-    const reqNameError = document.getElementById("reqNameError");
-    const reqDeptError = document.getElementById("reqDeptError");
-    const reqEmailError = document.getElementById("reqEmailError");
-    const reqDetailsError = document.getElementById("reqDetailsError");
-
-    function validateField(input, errorEl, testFn) {
-      const isValid = testFn(input.value.trim());
-      input.classList.toggle("is-invalid", !isValid);
-      input.setAttribute("aria-invalid", String(!isValid));
-      if (errorEl) errorEl.classList.toggle("is-visible", !isValid);
-      return isValid;
-    }
-
-    reqName?.addEventListener("input", () => validateField(reqName, reqNameError, (v) => v.length >= 2));
-    reqDept?.addEventListener("input", () => validateField(reqDept, reqDeptError, (v) => v.length >= 2));
-    reqEmail?.addEventListener("input", () => validateField(reqEmail, reqEmailError, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
-    reqDetails?.addEventListener("input", () => validateField(reqDetails, reqDetailsError, (v) => v.length >= 10));
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const isNameValid = validateField(reqName, reqNameError, (v) => v.length >= 2);
-      const isDeptValid = validateField(reqDept, reqDeptError, (v) => v.length >= 2);
-      const isEmailValid = validateField(reqEmail, reqEmailError, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
-      const isDetailsValid = validateField(reqDetails, reqDetailsError, (v) => v.length >= 10);
-
-      if (!isNameValid || !isDeptValid || !isEmailValid || !isDetailsValid) {
-        showToast("Please correct the errors in the form.");
-        const firstInvalid = form.querySelector(".is-invalid");
-        firstInvalid?.focus();
-        return;
-      }
-
-      const submissionData = {
-        type: reqType.value,
-        name: reqName.value.trim(),
-        department: reqDept.value.trim(),
-        email: reqEmail.value.trim(),
-        details: reqDetails.value.trim(),
-        date: new Date().toLocaleString(),
-      };
-
-      const mailSubject = encodeURIComponent(`IUBAT Directory Update: ${submissionData.name} (${submissionData.department})`);
-      const mailBody = encodeURIComponent(
-        `Directory Update Request\n` +
-        `-------------------------\n` +
-        `Type: ${submissionData.type}\n` +
-        `Faculty/Staff: ${submissionData.name}\n` +
-        `Department: ${submissionData.department}\n` +
-        `Submitted by: ${submissionData.email}\n` +
-        `Timestamp: ${submissionData.date}\n\n` +
-        `Details:\n${submissionData.details}\n`
-      );
-      const mailtoUrl = `mailto:${CONFIG.CONTACT.email}?subject=${mailSubject}&body=${mailBody}`;
-
-      const waText = encodeURIComponent(
-        `*IUBAT Directory Update*\n` +
-        `*Name:* ${submissionData.name}\n` +
-        `*Dept:* ${submissionData.department}\n` +
-        `*Contact:* ${submissionData.email}\n` +
-        `*Details:* ${submissionData.details}`
-      );
-      const waUrl = `https://wa.me/8801873319733?text=${waText}`;
-
-      // Render success screen in modal
-      elements.modalContent.innerHTML = `
-        <div class="form-success-card">
-          <div class="form-success-card__icon">${icons.check}</div>
-          <h3>Update Request Prepared</h3>
-          <p>Your details have been validated. Please click below to send the update via Email or WhatsApp.</p>
-          <div class="form-success-card__summary">
-            <strong>Target Profile:</strong> ${escapeHtml(submissionData.name)}<br>
-            <strong>Department:</strong> ${escapeHtml(submissionData.department)}<br>
-            <strong>From:</strong> ${escapeHtml(submissionData.email)}<br>
-            <strong>Note:</strong> ${escapeHtml(submissionData.details)}
-          </div>
-          <div class="form-success-card__actions">
-            <a href="${mailtoUrl}" class="btn btn--primary">${icons.mail} Send via Email</a>
-            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">Send via WhatsApp</a>
-            <button type="button" class="btn btn--soft" id="copySubmissionBtn">${icons.copy} Copy Info</button>
-          </div>
-        </div>
-      `;
-
-      document.getElementById("copySubmissionBtn")?.addEventListener("click", async () => {
-        const text = `Directory Update: ${submissionData.name} (${submissionData.department})\nContact: ${submissionData.email}\nDetails: ${submissionData.details}`;
-        await copyText(text);
-        showToast("Update information copied.");
-      });
-    });
   }
 
   function getFocusableElements() {
@@ -863,7 +745,12 @@
       : requestModalTemplate();
 
     if (type === "request") {
-      handleFormValidationAndSubmission();
+      const copyBtn = document.getElementById("copyContactInfoBtn");
+      copyBtn?.addEventListener("click", async () => {
+        const contactInfo = `Shawn (CSE)\nEmail: ${CONFIG.CONTACT.email}\nWhatsApp: ${CONFIG.CONTACT.whatsappDisplay}\nGitHub: ${CONFIG.CONTACT.github}\nFacebook: ${CONFIG.CONTACT.facebook}`;
+        await copyText(contactInfo);
+        showToast("Developer contact details copied to clipboard!");
+      });
     }
 
     elements.modalOverlay.hidden = false;
@@ -904,9 +791,9 @@
       document.body.classList.add("is-search-active");
       const heroEl = document.querySelector(".hero");
       if (heroEl) heroEl.classList.add("is-search-active");
-      requestAnimationFrame(() => {
-        elements.searchInput?.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+      if (window.scrollY > 20) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
     }
   }
 
