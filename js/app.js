@@ -1,9 +1,8 @@
 /**
- * IUBAT Employee Directory - Modern Application Coordinator
- * High-performance vanilla ES6+ engine with client-side indexing,
- * instant multi-field search, faculty & department hierarchical filtering,
- * study leave filtering, tone-coded cards, real WebP portraits, copy/share actions,
- * interactive profile modal, update request modal, and WCAG AA accessibility.
+ * IUBAT Faculty & Staff Directory - Application Coordinator
+ * High-performance client-side engine with instantaneous multi-field search,
+ * department filtering with live counts, tone-coded cards, lazy-loaded portraits,
+ * interactive profile modal, validated directory update submission, and WCAG 2.2 accessibility.
  */
 
 (() => {
@@ -11,13 +10,15 @@
 
   const CONFIG = Object.freeze({
     DATA_URL: "data/employees.json",
-    CACHE_KEY: "iubat_employee_directory_cache_v4",
+    CACHE_KEY: "iubat_employee_directory_cache_v5",
     CACHE_MAX_AGE_MS: 24 * 60 * 60 * 1000,
     CONTACT: Object.freeze({
       email: "shawn.cse@yahoo.com",
+      officialEmail: "info@iubat.edu",
       github: "https://github.com/shawn-cse",
       facebook: "https://facebook.com/shawnazd",
       whatsapp: "https://wa.me/8801873319733",
+      whatsappDisplay: "+880 1873 319733",
     }),
   });
 
@@ -34,9 +35,7 @@
     filteredEmployees: [],
     cardEntries: [],
     query: "",
-    selectedFaculty: "",
     selectedDepartment: "",
-    filterStudyLeave: false,
     view: storedView === "list" ? "list" : "grid",
     activeModal: null,
     lastFocusedElement: null,
@@ -49,9 +48,7 @@
     searchBtn: document.getElementById("searchBtn"),
     clearSearchBtn: document.getElementById("clearSearchBtn"),
     emptyResetBtn: document.getElementById("emptyResetBtn"),
-    facultySelect: document.getElementById("facultySelect"),
     departmentSelect: document.getElementById("departmentSelect"),
-    studyLeaveBtn: document.getElementById("studyLeaveBtn"),
     gridViewBtn: document.getElementById("gridViewBtn"),
     listViewBtn: document.getElementById("listViewBtn"),
     employeeList: document.getElementById("employeeList"),
@@ -62,8 +59,6 @@
     retryBtn: document.getElementById("retryBtn"),
     resultSummary: document.getElementById("resultSummary"),
     totalEmployees: document.getElementById("totalEmployees"),
-    totalDepartments: document.getElementById("totalDepartments"),
-    totalFaculties: document.getElementById("totalFaculties"),
     dataNotice: document.getElementById("dataNotice"),
     dataNoticeText: document.getElementById("dataNoticeText"),
     modalOverlay: document.getElementById("modalOverlay"),
@@ -83,9 +78,7 @@
     copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M15 9V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h4"/></svg>',
     share: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg>',
     arrow: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
-    academic: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
-    pin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
-    briefcase: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+    check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>',
   };
 
   function escapeHtml(value) {
@@ -112,19 +105,16 @@
 
   function getEmployeeProp(employee, key) {
     if (!employee) return "";
-    let val = "";
     if (employee[key] !== undefined && employee[key] !== null) {
-      val = cleanValue(employee[key]);
-    } else {
-      const lowerKey = key.toLowerCase();
-      for (const k of Object.keys(employee)) {
-        if (k.toLowerCase() === lowerKey) {
-          val = cleanValue(employee[k]);
-          break;
-        }
+      return cleanValue(employee[key]);
+    }
+    const lowerKey = key.toLowerCase();
+    for (const k of Object.keys(employee)) {
+      if (k.toLowerCase() === lowerKey) {
+        return cleanValue(employee[k]);
       }
     }
-    return val;
+    return "";
   }
 
   function formatRoom(value, ext) {
@@ -187,7 +177,7 @@
   }
 
   function buildEmployeeText(employee) {
-    const name = getEmployeeProp(employee, "name") || "IUBAT Employee";
+    const name = getEmployeeProp(employee, "name") || "IUBAT Member";
     const designation = getEmployeeProp(employee, "designation");
     const department = getEmployeeProp(employee, "department");
     const faculty = getEmployeeProp(employee, "faculty");
@@ -211,6 +201,7 @@
       email ? `Email: ${email}` : "",
       phone ? `Phone: ${phone}` : "",
       address ? `Address: ${address}` : "",
+      "International University of Business Agriculture and Technology (IUBAT)",
     ].filter(Boolean).join("\n");
   }
 
@@ -229,7 +220,6 @@
       await navigator.clipboard.writeText(text);
       return;
     }
-
     const textarea = document.createElement("textarea");
     textarea.value = text;
     textarea.setAttribute("readonly", "");
@@ -243,7 +233,7 @@
   }
 
   async function shareEmployee(employee) {
-    const name = getEmployeeProp(employee, "name") || "IUBAT Employee";
+    const name = getEmployeeProp(employee, "name") || "IUBAT Directory Member";
     const text = buildEmployeeText(employee);
 
     if (navigator.share) {
@@ -256,7 +246,7 @@
     }
 
     await copyText(text);
-    showToast("Employee details copied to clipboard.");
+    showToast("Profile details copied to clipboard.");
   }
 
   async function fetchEmployees() {
@@ -271,7 +261,7 @@
     }
 
     const data = await response.json();
-    if (!Array.isArray(data)) throw new Error("The directory returned an invalid response.");
+    if (!Array.isArray(data)) throw new Error("Invalid directory response.");
     return data;
   }
 
@@ -281,9 +271,7 @@
         CONFIG.CACHE_KEY,
         JSON.stringify({ savedAt: Date.now(), employees }),
       );
-    } catch (_) {
-      // Storage full or unavailable
-    }
+    } catch (_) {}
   }
 
   function readCache() {
@@ -308,56 +296,47 @@
     if (elements.dataNotice) elements.dataNotice.hidden = true;
   }
 
-  function uniqueFaculties(employees) {
-    return [...new Set(
-      employees.map((emp) => getEmployeeProp(emp, "faculty")).filter(Boolean),
-    )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-  }
-
-  function uniqueDepartments(employees, facultyFilter = "") {
-    const list = facultyFilter
-      ? employees.filter((emp) => getEmployeeProp(emp, "faculty") === facultyFilter)
-      : employees;
-    return [...new Set(
-      list.map((emp) => getEmployeeProp(emp, "department")).filter(Boolean),
-    )].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-  }
-
-  function updateStats() {
-    const total = state.employees.length;
-    const depts = uniqueDepartments(state.employees).length;
-    const faculties = uniqueFaculties(state.employees).length;
-
-    if (elements.totalEmployees) elements.totalEmployees.textContent = total.toLocaleString();
-    if (elements.totalDepartments) elements.totalDepartments.textContent = depts.toLocaleString();
-    if (elements.totalFaculties) elements.totalFaculties.textContent = faculties.toLocaleString();
-  }
-
-  function populateFacultySelect() {
-    if (!elements.facultySelect) return;
-    const faculties = uniqueFaculties(state.employees);
-    const current = state.selectedFaculty;
-
-    elements.facultySelect.innerHTML = '<option value="">All Faculties</option>' +
-      faculties.map((f) => `<option value="${escapeHtml(f)}">${escapeHtml(f)}</option>`).join("");
-
-    elements.facultySelect.value = current;
+  function departmentCounts(employees) {
+    const counts = new Map();
+    employees.forEach((emp) => {
+      const dept = getEmployeeProp(emp, "department");
+      if (dept) {
+        counts.set(dept, (counts.get(dept) || 0) + 1);
+      }
+    });
+    return counts;
   }
 
   function populateDepartmentSelect() {
     if (!elements.departmentSelect) return;
-    const depts = uniqueDepartments(state.employees, state.selectedFaculty);
+    const counts = departmentCounts(state.employees);
+    const sortedDepts = [...counts.keys()].sort((a, b) =>
+      a.localeCompare(b, undefined, { sensitivity: "base" })
+    );
+
+    const totalCount = state.employees.length;
     const current = state.selectedDepartment;
 
-    const label = state.selectedFaculty ? `All Departments in ${state.selectedFaculty}` : "All Departments";
-    elements.departmentSelect.innerHTML = `<option value="">${escapeHtml(label)}</option>` +
-      depts.map((d) => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join("");
+    let html = `<option value="">All Departments (${totalCount.toLocaleString()})</option>`;
+    sortedDepts.forEach((dept) => {
+      const count = counts.get(dept);
+      html += `<option value="${escapeHtml(dept)}">${escapeHtml(dept)} (${count})</option>`;
+    });
 
-    if (depts.includes(current)) {
+    elements.departmentSelect.innerHTML = html;
+
+    if (sortedDepts.includes(current)) {
       elements.departmentSelect.value = current;
     } else {
       elements.departmentSelect.value = "";
       state.selectedDepartment = "";
+    }
+  }
+
+  function updateStats() {
+    const total = state.employees.length;
+    if (elements.totalEmployees) {
+      elements.totalEmployees.textContent = total.toLocaleString();
     }
   }
 
@@ -382,8 +361,8 @@
   }
 
   function employeeCardTemplate(employee, index) {
-    const name = getEmployeeProp(employee, "name") || "IUBAT Employee";
-    const designation = getEmployeeProp(employee, "designation") || "Employee";
+    const name = getEmployeeProp(employee, "name") || "IUBAT Member";
+    const designation = getEmployeeProp(employee, "designation") || "Faculty / Staff";
     const department = getEmployeeProp(employee, "department");
     const room = formatRoom(getEmployeeProp(employee, "room"), getEmployeeProp(employee, "ext")) || getEmployeeProp(employee, "office");
     const email = safeEmail(getEmployeeProp(employee, "email"));
@@ -427,9 +406,9 @@
             </div>
           </div>
 
-          ${details ? `<ul class="employee-meta">${details}</ul>` : '<p class="employee-meta employee-meta--empty">Office details not provided.</p>'}
+          ${details ? `<ul class="employee-meta">${details}</ul>` : '<p class="employee-meta employee-meta--empty">Office details not listed.</p>'}
 
-          ${contacts ? `<div class="employee-contacts">${contacts}</div>` : '<p class="contact-unavailable">Contact information unavailable.</p>'}
+          ${contacts ? `<div class="employee-contacts">${contacts}</div>` : '<p class="contact-unavailable">Contact information not listed.</p>'}
 
           <div class="employee-card__footer">
             <button class="text-button" type="button" data-action="profile" title="Open full profile for ${escapeHtml(name)}">
@@ -457,9 +436,7 @@
       return {
         card,
         employee: emp,
-        faculty: normalize(getEmployeeProp(emp, "faculty")),
         department: normalize(getEmployeeProp(emp, "department")),
-        isStudyLeave: Boolean(emp.studyLeave),
         searchText: buildSearchIndex(emp),
       };
     });
@@ -470,20 +447,18 @@
     const total = state.employees.length;
 
     if (!total) {
-      elements.resultSummary.textContent = "No employees available.";
+      elements.resultSummary.textContent = "No directory profiles loaded.";
       return;
     }
 
     const filters = [];
-    if (state.selectedFaculty) filters.push(state.selectedFaculty);
     if (state.selectedDepartment) filters.push(state.selectedDepartment);
-    if (state.filterStudyLeave) filters.push("Study Leave");
     if (state.query) filters.push(`"${state.query}"`);
 
     if (filters.length) {
-      elements.resultSummary.textContent = `Showing ${shown.toLocaleString()} of ${total.toLocaleString()} employees (${filters.join(", ")})`;
+      elements.resultSummary.textContent = `Showing ${shown.toLocaleString()} of ${total.toLocaleString()} members (${filters.join(" • ")})`;
     } else {
-      elements.resultSummary.textContent = `${total.toLocaleString()} verified personnel available`;
+      elements.resultSummary.textContent = `Showing all ${total.toLocaleString()} faculty and staff members`;
     }
   }
 
@@ -491,29 +466,21 @@
     if (elements.clearSearchBtn) {
       elements.clearSearchBtn.hidden = !state.query;
     }
-    if (elements.studyLeaveBtn) {
-      elements.studyLeaveBtn.classList.toggle("is-active", state.filterStudyLeave);
-      elements.studyLeaveBtn.setAttribute("aria-pressed", String(state.filterStudyLeave));
-    }
   }
 
   function applyFilters() {
     const query = normalize(state.query);
-    const selectedFaculty = normalize(state.selectedFaculty);
     const selectedDept = normalize(state.selectedDepartment);
-    const filterStudyLeave = state.filterStudyLeave;
     const matches = [];
 
-    // Tokenized query matching: all tokens must be present
+    // Tokenized query matching: every word entered must match
     const tokens = query ? query.split(/\s+/).filter(Boolean) : [];
 
     state.cardEntries.forEach((entry) => {
       const matchesTokens = !tokens.length || tokens.every((tok) => entry.searchText.includes(tok));
-      const matchesFaculty = !selectedFaculty || entry.faculty === selectedFaculty;
       const matchesDept = !selectedDept || entry.department === selectedDept;
-      const matchesStudyLeave = !filterStudyLeave || entry.isStudyLeave;
 
-      const visible = matchesTokens && matchesFaculty && matchesDept && matchesStudyLeave;
+      const visible = matchesTokens && matchesDept;
       entry.card.hidden = !visible;
       if (visible) matches.push(entry.employee);
     });
@@ -549,46 +516,34 @@
       saveCache(employees);
       if (elements.errorState) elements.errorState.hidden = true;
       updateStats();
-      populateFacultySelect();
       populateDepartmentSelect();
       renderEmployees();
 
-      // Read optional URL parameters (?q=...&faculty=...&dept=...&studyleave=1)
+      // Read optional URL parameters (?q=...&dept=...)
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const initialQuery = urlParams.get("q") || urlParams.get("search");
-        const initialFaculty = urlParams.get("faculty");
         const initialDept = urlParams.get("dept") || urlParams.get("department");
-        const initialStudy = urlParams.get("studyleave");
 
         if (initialQuery) {
           state.query = initialQuery;
           if (elements.searchInput) elements.searchInput.value = initialQuery;
         }
-        if (initialFaculty) {
-          state.selectedFaculty = initialFaculty;
-          if (elements.facultySelect) elements.facultySelect.value = initialFaculty;
-          populateDepartmentSelect();
-        }
         if (initialDept) {
           state.selectedDepartment = initialDept;
           if (elements.departmentSelect) elements.departmentSelect.value = initialDept;
-        }
-        if (initialStudy === "1" || initialStudy === "true") {
-          state.filterStudyLeave = true;
         }
       } catch (_) {}
 
       updateMobileSearchState();
       applyFilters();
     } catch (error) {
-      console.warn("Direct fetch failed, checking local cache...", error);
+      console.warn("Direct fetch failed, falling back to cached directory...", error);
       const cache = readCache();
 
       if (cache) {
         state.employees = cache.employees;
         updateStats();
-        populateFacultySelect();
         populateDepartmentSelect();
         renderEmployees();
         applyFilters();
@@ -614,11 +569,8 @@
     }
     state.query = "";
     if (elements.searchInput) elements.searchInput.value = "";
-    state.selectedFaculty = "";
-    if (elements.facultySelect) elements.facultySelect.value = "";
     state.selectedDepartment = "";
-    state.filterStudyLeave = false;
-    populateDepartmentSelect();
+    if (elements.departmentSelect) elements.departmentSelect.value = "";
     applyFilters();
     updateMobileSearchState();
     if (focusSearch && elements.searchInput) {
@@ -655,11 +607,11 @@
   }
 
   function profileModalTemplate(employee) {
-    const name = getEmployeeProp(employee, "name") || "IUBAT Employee";
-    const designation = getEmployeeProp(employee, "designation") || "Employee";
-    const department = getEmployeeProp(employee, "department") || "Not provided";
+    const name = getEmployeeProp(employee, "name") || "IUBAT Member";
+    const designation = getEmployeeProp(employee, "designation") || "Faculty / Staff";
+    const department = getEmployeeProp(employee, "department") || "Not listed";
     const faculty = getEmployeeProp(employee, "faculty") || "Not specified";
-    const room = formatRoom(getEmployeeProp(employee, "room"), getEmployeeProp(employee, "ext")) || getEmployeeProp(employee, "office") || "Not provided";
+    const room = formatRoom(getEmployeeProp(employee, "room"), getEmployeeProp(employee, "ext")) || getEmployeeProp(employee, "office") || "Not listed";
     const email = safeEmail(getEmployeeProp(employee, "email"));
     const phone = phoneParts(getEmployeeProp(employee, "phone"));
     const qualifications = getEmployeeProp(employee, "qualifications");
@@ -679,11 +631,11 @@
         <div class="profile-modal__hero">
           <div class="avatar avatar--large" aria-hidden="true">${avatarHtml}</div>
           <div>
-            <p class="modal__eyebrow">Employee profile</p>
+            <p class="modal__eyebrow">Directory Profile</p>
             <h2 id="modalTitle">${escapeHtml(name)}</h2>
             <p>${escapeHtml(designation)}</p>
             <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;">
-              ${onStudyLeave ? '<span class="badge badge--study-leave">On Academic Study Leave</span>' : '<span class="badge" style="background:#e6f4ea;color:#137333;border:1px solid #ceead6;">Active Faculty / Staff</span>'}
+              ${onStudyLeave ? '<span class="badge badge--study-leave">On Academic Study Leave</span>' : '<span class="badge" style="background:#e6f4ea;color:#137333;border:1px solid #ceead6;">Active Campus Faculty / Staff</span>'}
               ${additionalResp ? `<span class="badge badge--role">${escapeHtml(additionalResp)}</span>` : ""}
             </div>
           </div>
@@ -693,11 +645,11 @@
           <div><dt>Department / Office</dt><dd>${escapeHtml(department)}</dd></div>
           <div><dt>Faculty / Division</dt><dd>${escapeHtml(faculty)}</dd></div>
           <div><dt>Office / Room</dt><dd>${escapeHtml(room)}</dd></div>
-          <div><dt>Phone / Contact</dt><dd>${phone.tel ? `<a href="tel:${escapeHtml(phone.tel)}">${escapeHtml(phone.display)}</a>` : "Not provided"}</dd></div>
-          <div class="full-width"><dt>Official Email</dt><dd>${email ? `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>` : "Not provided"}</dd></div>
+          <div><dt>Phone / Contact</dt><dd>${phone.tel ? `<a href="tel:${escapeHtml(phone.tel)}">${escapeHtml(phone.display)}</a>` : "Not listed"}</dd></div>
+          <div class="full-width"><dt>Official Email</dt><dd>${email ? `<a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a>` : "Not listed"}</dd></div>
           ${qualifications ? `<div class="full-width"><dt>Academic Qualifications</dt><dd>${escapeHtml(qualifications)}</dd></div>` : ""}
           ${affiliation ? `<div class="full-width"><dt>Institutional Affiliation</dt><dd>${escapeHtml(affiliation)}</dd></div>` : ""}
-          ${presentAddress ? `<div class="full-width"><dt>Present Address</dt><dd>${escapeHtml(presentAddress)}</dd></div>` : ""}
+          ${presentAddress ? `<div class="full-width"><dt>Campus Address</dt><dd>${escapeHtml(presentAddress)}</dd></div>` : ""}
           ${permanentAddress ? `<div class="full-width"><dt>Permanent Address</dt><dd>${escapeHtml(permanentAddress)}</dd></div>` : ""}
         </dl>
 
@@ -714,25 +666,187 @@
   function requestModalTemplate() {
     return `
       <div class="request-modal">
-        <p class="modal__eyebrow">Directory Support</p>
-        <h2 id="modalTitle">Request or update a listing</h2>
-        <p class="modal__lead">Report updated employee details or request additions via any of the channels below.</p>
+        <div class="request-modal__header">
+          <p class="modal__eyebrow">Directory Support & Updates</p>
+          <h2 id="modalTitle">Submit Directory Update</h2>
+          <p class="modal__lead">Suggest a profile correction, report updated room/contact numbers, or submit new additions.</p>
+        </div>
+
+        <form id="updateRequestForm" class="update-form" novalidate>
+          <div class="form-group">
+            <label for="reqType">Request Type <span class="required">*</span></label>
+            <select id="reqType" class="form-control" required>
+              <option value="correction">Profile Information Correction</option>
+              <option value="new_listing">New Faculty / Staff Addition</option>
+              <option value="contact_update">Phone / Email / Room Update</option>
+              <option value="leave_status">Study Leave Status Update</option>
+              <option value="other">General Directory Inquiry</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reqName">Faculty / Staff Name <span class="required">*</span></label>
+              <input type="text" id="reqName" class="form-control" placeholder="e.g. Dr. Md. Ismail Hossain" required autocomplete="name" />
+              <span class="field-error" id="reqNameError">Please enter a valid name (at least 2 characters).</span>
+            </div>
+            <div class="form-group">
+              <label for="reqDept">Department / Office <span class="required">*</span></label>
+              <input type="text" id="reqDept" class="form-control" placeholder="e.g. Computer Science & Engineering" required />
+              <span class="field-error" id="reqDeptError">Please provide the department or office.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reqEmail">Your Contact Email <span class="required">*</span></label>
+            <input type="email" id="reqEmail" class="form-control" placeholder="e.g. yourname@iubat.edu or personal email" required autocomplete="email" />
+            <span class="field-error" id="reqEmailError">Please provide a valid email address.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="reqDetails">Details of Update / Changes <span class="required">*</span></label>
+            <textarea id="reqDetails" class="form-control" rows="3" placeholder="Please specify the updated designation, room number, phone number, email, or new listing information..." required></textarea>
+            <span class="field-error" id="reqDetailsError">Please provide at least 10 characters detailing the update.</span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn--primary" id="submitUpdateBtn">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+              <span>Submit Update</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="direct-contact-divider">
+          <span>Or reach out directly</span>
+        </div>
+
         <div class="request-options">
-          <a href="mailto:${escapeHtml(CONFIG.CONTACT.email)}?subject=IUBAT%20Employee%20Directory%20Update" class="request-option">
-            <span>${icons.mail}</span><div><strong>Email</strong><small>${escapeHtml(CONFIG.CONTACT.email)}</small></div>${icons.arrow}
-          </a>
-          <a href="${escapeHtml(CONFIG.CONTACT.github)}" target="_blank" rel="noopener noreferrer" class="request-option">
-            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg></span><div><strong>GitHub</strong><small>shawn-cse</small></div>${icons.arrow}
-          </a>
-          <a href="${escapeHtml(CONFIG.CONTACT.facebook)}" target="_blank" rel="noopener noreferrer" class="request-option">
-            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></span><div><strong>Facebook</strong><small>Message shawnazd</small></div>${icons.arrow}
+          <a href="mailto:${escapeHtml(CONFIG.CONTACT.email)}?subject=IUBAT%20Directory%20Update" class="request-option">
+            <span>${icons.mail}</span>
+            <div><strong>Email Coordinator</strong><small>${escapeHtml(CONFIG.CONTACT.email)}</small></div>
+            ${icons.arrow}
           </a>
           <a href="${escapeHtml(CONFIG.CONTACT.whatsapp)}" target="_blank" rel="noopener noreferrer" class="request-option">
-            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l5.9-1.6A11.8 11.8 0 0 0 20.5 3.5ZM12 21a9.7 9.7 0 0 1-4.9-1.3l-.4-.2-3.5 1 1-3.4-.2-.4A9.7 9.7 0 1 1 12 21Z"/><path d="M8.6 6.8c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 3s1.3 3.5 1.5 3.7c.2.2 2.6 4 6.3 5.6 3.1 1.4 3.7 1.1 4.4 1 .7-.1 2.2-.9 2.5-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5l-2.6-1.2c-.4-.1-.7-.2-1 .2l-1.1 1.4c-.3.3-.5.3-.9.1a8 8 0 0 1-2.3-1.4 8.7 8.7 0 0 1-1.6-2c-.2-.4 0-.6.1-.8l.6-.7.4-.7c.1-.3 0-.5 0-.7L9.8 7.3c-.3-.7-.6-.6-1.2-.5Z"/></svg></span><div><strong>WhatsApp</strong><small>+880 1873 319733</small></div>${icons.arrow}
+            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l5.9-1.6A11.8 11.8 0 0 0 20.5 3.5ZM12 21a9.7 9.7 0 0 1-4.9-1.3l-.4-.2-3.5 1 1-3.4-.2-.4A9.7 9.7 0 1 1 12 21Z"/><path d="M8.6 6.8c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 3s1.3 3.5 1.5 3.7c.2.2 2.6 4 6.3 5.6 3.1 1.4 3.7 1.1 4.4 1 .7-.1 2.2-.9 2.5-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5l-2.6-1.2c-.4-.1-.7-.2-1 .2l-1.1 1.4c-.3.3-.5.3-.9.1a8 8 0 0 1-2.3-1.4 8.7 8.7 0 0 1-1.6-2c-.2-.4 0-.6.1-.8l.6-.7.4-.7c.1-.3 0-.5 0-.7L9.8 7.3c-.3-.7-.6-.6-1.2-.5Z"/></svg></span>
+            <div><strong>WhatsApp Direct</strong><small>${escapeHtml(CONFIG.CONTACT.whatsappDisplay)}</small></div>
+            ${icons.arrow}
+          </a>
+          <a href="${escapeHtml(CONFIG.CONTACT.github)}" target="_blank" rel="noopener noreferrer" class="request-option">
+            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg></span>
+            <div><strong>GitHub Repository</strong><small>shawn-cse / iubat-employee</small></div>
+            ${icons.arrow}
+          </a>
+          <a href="${escapeHtml(CONFIG.CONTACT.facebook)}" target="_blank" rel="noopener noreferrer" class="request-option">
+            <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg></span>
+            <div><strong>Facebook Messenger</strong><small>shawnazd</small></div>
+            ${icons.arrow}
           </a>
         </div>
       </div>
     `;
+  }
+
+  function handleFormValidationAndSubmission() {
+    const form = document.getElementById("updateRequestForm");
+    if (!form) return;
+
+    const reqName = document.getElementById("reqName");
+    const reqDept = document.getElementById("reqDept");
+    const reqEmail = document.getElementById("reqEmail");
+    const reqDetails = document.getElementById("reqDetails");
+    const reqType = document.getElementById("reqType");
+
+    const reqNameError = document.getElementById("reqNameError");
+    const reqDeptError = document.getElementById("reqDeptError");
+    const reqEmailError = document.getElementById("reqEmailError");
+    const reqDetailsError = document.getElementById("reqDetailsError");
+
+    function validateField(input, errorEl, testFn) {
+      const isValid = testFn(input.value.trim());
+      input.classList.toggle("is-invalid", !isValid);
+      input.setAttribute("aria-invalid", String(!isValid));
+      if (errorEl) errorEl.classList.toggle("is-visible", !isValid);
+      return isValid;
+    }
+
+    reqName?.addEventListener("input", () => validateField(reqName, reqNameError, (v) => v.length >= 2));
+    reqDept?.addEventListener("input", () => validateField(reqDept, reqDeptError, (v) => v.length >= 2));
+    reqEmail?.addEventListener("input", () => validateField(reqEmail, reqEmailError, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)));
+    reqDetails?.addEventListener("input", () => validateField(reqDetails, reqDetailsError, (v) => v.length >= 10));
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const isNameValid = validateField(reqName, reqNameError, (v) => v.length >= 2);
+      const isDeptValid = validateField(reqDept, reqDeptError, (v) => v.length >= 2);
+      const isEmailValid = validateField(reqEmail, reqEmailError, (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v));
+      const isDetailsValid = validateField(reqDetails, reqDetailsError, (v) => v.length >= 10);
+
+      if (!isNameValid || !isDeptValid || !isEmailValid || !isDetailsValid) {
+        showToast("Please correct the errors in the form.");
+        const firstInvalid = form.querySelector(".is-invalid");
+        firstInvalid?.focus();
+        return;
+      }
+
+      const submissionData = {
+        type: reqType.value,
+        name: reqName.value.trim(),
+        department: reqDept.value.trim(),
+        email: reqEmail.value.trim(),
+        details: reqDetails.value.trim(),
+        date: new Date().toLocaleString(),
+      };
+
+      const mailSubject = encodeURIComponent(`IUBAT Directory Update: ${submissionData.name} (${submissionData.department})`);
+      const mailBody = encodeURIComponent(
+        `Directory Update Request\n` +
+        `-------------------------\n` +
+        `Type: ${submissionData.type}\n` +
+        `Faculty/Staff: ${submissionData.name}\n` +
+        `Department: ${submissionData.department}\n` +
+        `Submitted by: ${submissionData.email}\n` +
+        `Timestamp: ${submissionData.date}\n\n` +
+        `Details:\n${submissionData.details}\n`
+      );
+      const mailtoUrl = `mailto:${CONFIG.CONTACT.email}?subject=${mailSubject}&body=${mailBody}`;
+
+      const waText = encodeURIComponent(
+        `*IUBAT Directory Update*\n` +
+        `*Name:* ${submissionData.name}\n` +
+        `*Dept:* ${submissionData.department}\n` +
+        `*Contact:* ${submissionData.email}\n` +
+        `*Details:* ${submissionData.details}`
+      );
+      const waUrl = `https://wa.me/8801873319733?text=${waText}`;
+
+      // Render success screen in modal
+      elements.modalContent.innerHTML = `
+        <div class="form-success-card">
+          <div class="form-success-card__icon">${icons.check}</div>
+          <h3>Update Request Prepared</h3>
+          <p>Your details have been validated. Please click below to send the update via Email or WhatsApp.</p>
+          <div class="form-success-card__summary">
+            <strong>Target Profile:</strong> ${escapeHtml(submissionData.name)}<br>
+            <strong>Department:</strong> ${escapeHtml(submissionData.department)}<br>
+            <strong>From:</strong> ${escapeHtml(submissionData.email)}<br>
+            <strong>Note:</strong> ${escapeHtml(submissionData.details)}
+          </div>
+          <div class="form-success-card__actions">
+            <a href="${mailtoUrl}" class="btn btn--primary">${icons.mail} Send via Email</a>
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">Send via WhatsApp</a>
+            <button type="button" class="btn btn--soft" id="copySubmissionBtn">${icons.copy} Copy Info</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("copySubmissionBtn")?.addEventListener("click", async () => {
+        const text = `Directory Update: ${submissionData.name} (${submissionData.department})\nContact: ${submissionData.email}\nDetails: ${submissionData.details}`;
+        await copyText(text);
+        showToast("Update information copied.");
+      });
+    });
   }
 
   function getFocusableElements() {
@@ -747,6 +861,11 @@
     elements.modalContent.innerHTML = type === "profile" && employee
       ? profileModalTemplate(employee)
       : requestModalTemplate();
+
+    if (type === "request") {
+      handleFormValidationAndSubmission();
+    }
+
     elements.modalOverlay.hidden = false;
     document.body.classList.add("modal-open");
     requestAnimationFrame(() => {
@@ -852,24 +971,9 @@
       elements.retryBtn.addEventListener("click", loadDirectory);
     }
 
-    if (elements.facultySelect) {
-      elements.facultySelect.addEventListener("change", (e) => {
-        state.selectedFaculty = e.target.value;
-        populateDepartmentSelect();
-        applyFilters();
-      });
-    }
-
     if (elements.departmentSelect) {
       elements.departmentSelect.addEventListener("change", (e) => {
         state.selectedDepartment = e.target.value;
-        applyFilters();
-      });
-    }
-
-    if (elements.studyLeaveBtn) {
-      elements.studyLeaveBtn.addEventListener("click", () => {
-        state.filterStudyLeave = !state.filterStudyLeave;
         applyFilters();
       });
     }
@@ -897,7 +1001,7 @@
               break;
             case "copy":
               await copyText(buildEmployeeText(employee));
-              showToast("Employee details copied.");
+              showToast("Profile details copied.");
               break;
             case "share":
               await shareEmployee(employee);
@@ -910,7 +1014,7 @@
       });
     }
 
-    // Modal internal action buttons (Copy / Share from inside modal)
+    // Modal internal action buttons (Copy / Share from inside profile modal)
     if (elements.modalPanel) {
       elements.modalPanel.addEventListener("click", async (event) => {
         const modalBtn = event.target.closest("[data-modal-action]");
@@ -920,7 +1024,7 @@
         if (modalBtn.dataset.modalAction === "copy") {
           try {
             await copyText(buildEmployeeText(emp));
-            showToast("Employee details copied.");
+            showToast("Profile details copied.");
           } catch (e) {
             showToast("Failed to copy details.");
           }
@@ -930,7 +1034,7 @@
       });
     }
 
-    // Modal Triggers & Controls
+    // Modal Triggers
     document.querySelectorAll("[data-open-request]").forEach((button) => {
       button.addEventListener("click", () => openModal("request"));
     });

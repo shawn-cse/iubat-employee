@@ -3,29 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#155f45" />
-    <title>Page Not Found — IUBAT Employee Roster</title>
+    <meta name="theme-color" content="#0a3524" />
+    <meta name="author" content="Shawn (shawn-cse)" />
+    <title>Page Not Found — IUBAT Faculty &amp; Staff Directory</title>
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="manifest" href="assets/site.webmanifest" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/responsive.css" />
   </head>
   <body style="min-height: 100vh; display: flex; flex-direction: column;">
     <header class="site-header" role="banner">
       <div class="container site-header__inner">
-        <a class="brand" href="index.html" aria-label="IUBAT Employee Roster home">
-          <img src="assets/images/logo.png" alt="IUBAT Crest" class="brand__crest" width="34" height="34" />
+        <a class="brand" href="index.html" aria-label="IUBAT Faculty &amp; Staff Directory home">
+          <img src="assets/images/logo.png" alt="IUBAT Crest" class="brand__crest" width="38" height="38" />
           <span class="brand__copy">
             <strong>IUBAT</strong>
-            <span>Employee Roster</span>
+            <span>Faculty &amp; Staff Directory</span>
           </span>
         </a>
 
         <a class="btn btn--outline btn--compact" href="index.html">
-          <span>Return to Roster</span>
+          <span>Return to Directory</span>
         </a>
       </div>
     </header>
@@ -35,23 +36,74 @@
         <span class="state-card__icon state-card__icon--error" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M10.3 3.7 2.4 17.3A2 2 0 0 0 4.1 20h15.8a2 2 0 0 0 1.7-2.7L13.7 3.7a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
         </span>
-        <h1 style="font-family: var(--font-display); font-size: 26px; font-weight: 800; margin: 0 0 8px; color: var(--ink-strong);">Page Not Found (404)</h1>
+        <h1 style="font-family: var(--font-display); font-size: 24px; font-weight: 800; margin: 0 0 8px; color: var(--ink-strong);">Page Not Found (404)</h1>
         <p style="color: var(--text-soft); font-size: 14px; margin: 0 0 20px;">
-          The page or link you requested is not available. You can browse and search all verified campus faculty and staff from the main employee roster.
+          The page or link you requested was not found. You can browse and search all verified campus faculty, officers, and staff members from the main directory.
         </p>
         <a href="index.html" class="btn btn--primary" style="display: inline-flex;">
-          Open Employee Roster
+          Open Directory
         </a>
       </div>
     </main>
 
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <div>
-          <strong>IUBAT Employee Roster</strong>
-          <p>Built for faster campus communication.</p>
+        <div class="developer-profile">
+          <div class="developer-avatar" aria-hidden="true">
+            <span>SC</span>
+          </div>
+          <div class="developer-info">
+            <span class="developer-tag">Designed &amp; Developed by</span>
+            <h3 class="developer-name">Shawn</h3>
+            <p class="developer-bio">Computer Science &amp; Engineering • Full Stack Developer</p>
+          </div>
         </div>
-        <p class="site-footer__copyright">© 2026 International University of Business Agriculture and Technology</p>
+
+        <div class="developer-contacts">
+          <a href="mailto:shawn.cse@yahoo.com" class="dev-contact-card" title="Email Shawn">
+            <span class="dev-contact-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+            </span>
+            <div class="dev-contact-card__content">
+              <small>Email</small>
+              <strong>shawn.cse@yahoo.com</strong>
+            </div>
+          </a>
+
+          <a href="https://wa.me/8801873319733" target="_blank" rel="noopener noreferrer" class="dev-contact-card" title="Message on WhatsApp">
+            <span class="dev-contact-card__icon dev-contact-card__icon--whatsapp" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M20.5 3.5A11.8 11.8 0 0 0 2 17.7L.5 23.5l5.9-1.6A11.8 11.8 0 0 0 20.5 3.5ZM12 21a9.7 9.7 0 0 1-4.9-1.3l-.4-.2-3.5 1 1-3.4-.2-.4A9.7 9.7 0 1 1 12 21Z"/><path d="M8.6 6.8c-.2-.5-.4-.5-.7-.5h-.6c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 3s1.3 3.5 1.5 3.7c.2.2 2.6 4 6.3 5.6 3.1 1.4 3.7 1.1 4.4 1 .7-.1 2.2-.9 2.5-1.8.3-.9.3-1.7.2-1.8-.1-.2-.3-.3-.7-.5l-2.6-1.2c-.4-.1-.7-.2-1 .2l-1.1 1.4c-.3.3-.5.3-.9.1a8 8 0 0 1-2.3-1.4 8.7 8.7 0 0 1-1.6-2c-.2-.4 0-.6.1-.8l.6-.7.4-.7c.1-.3 0-.5 0-.7L9.8 7.3c-.3-.7-.6-.6-1.2-.5Z"/></svg>
+            </span>
+            <div class="dev-contact-card__content">
+              <small>WhatsApp</small>
+              <strong>+880 1873 319733</strong>
+            </div>
+          </a>
+
+          <a href="https://github.com/shawn-cse" target="_blank" rel="noopener noreferrer" class="dev-contact-card" title="GitHub Profile">
+            <span class="dev-contact-card__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2Z"/></svg>
+            </span>
+            <div class="dev-contact-card__content">
+              <small>GitHub</small>
+              <strong>@shawn-cse</strong>
+            </div>
+          </a>
+
+          <a href="https://facebook.com/shawnazd" target="_blank" rel="noopener noreferrer" class="dev-contact-card" title="Facebook Profile">
+            <span class="dev-contact-card__icon dev-contact-card__icon--facebook" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3c-3 0-5 2-5 5v2H6v4h3v7h4v-7h3l1-4h-4V9c0-.7.3-1 1-1Z"/></svg>
+            </span>
+            <div class="dev-contact-card__content">
+              <small>Facebook</small>
+              <strong>shawnazd</strong>
+            </div>
+          </a>
+        </div>
+
+        <div class="developer-footer-bottom">
+          <p class="copyright-text">© 2026 Shawn. All rights reserved.</p>
+        </div>
       </div>
     </footer>
   </body>

@@ -1,28 +1,33 @@
 /**
- * IUBAT Employee Directory - Fine-grained Responsive & Touch-Target Enhancements
- * Ensures WCAG 2.2 touch-target compliance (>= 44x44px) and fluid spacing across all screens.
+ * IUBAT Faculty & Staff Directory - Fine-grained Responsive Enhancements
+ * Ensures WCAG 2.2 touch-target compliance (>= 44x44px), fluid spacing, and seamless search focus.
  */
 
 /* Extra small devices (<= 360px) */
 @media (max-width: 360px) {
-  .hero h1 { font-size: 21px; }
+  .hero h1 { font-size: 20px; }
   .eyebrow { font-size: 9px; }
-  .directory-stats > div { padding: 0 6px; font-size: 10.5px; }
-  .directory-stats strong { font-size: 11.5px; }
+  .directory-stats { padding: 4px 8px; font-size: 11px; }
+  .directory-stats strong { font-size: 12px; }
   .hero-search input { font-size: 16px; }
   .brand__copy strong { font-size: 13px; }
-  .brand__copy span { font-size: 10.5px; }
+  .brand__copy span { font-size: 10px; }
   .employee-card article { padding: 12px; }
   .employee-card__header { grid-template-columns: 44px minmax(0,1fr); gap: 10px; }
   .avatar { width: 44px; height: 44px; }
-  .employee-card__identity h3 { font-size: 15px; }
-  .employee-card__identity p { font-size: 12px; }
+  .employee-card__identity h3 { font-size: 14.5px; }
+  .employee-card__identity p { font-size: 11.5px; }
+  .toolbar-select { font-size: 12px; padding-left: 10px; }
+  .developer-avatar { width: 44px; height: 44px; font-size: 16px; }
+  .developer-name { font-size: 19px; }
+  .dev-contact-card { padding: 9px 10px; }
+  .dev-contact-card__content strong { font-size: 12px; }
 }
 
 /* Landscape Phones */
 @media (max-height: 480px) and (orientation: landscape) {
   .hero { padding: 12px 0 14px; position: static; }
-  .hero h1 { font-size: 20px; }
+  .hero h1 { font-size: 19px; }
   .directory-stats { margin-top: 6px; }
   .hero-search { margin-top: 8px; min-height: 42px; }
   .modal { max-height: 94vh; padding: 16px; }
@@ -36,4 +41,5 @@
   .icon-btn { min-width: 38px; min-height: 38px; }
   .toolbar-select { min-height: 42px; }
   .view-switch__button { min-width: 38px; min-height: 38px; }
+  .header-action { min-height: 38px; }
 }
